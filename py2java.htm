@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python vs Java - Guide de Transition</title>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+```
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+padding: 20px;
+min-height: 100vh;
+}
+
+.container {
+max-width: 1400px;
+margin: 0 auto;
+background: white;
+border-radius: 15px;
+box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+overflow: hidden;
+}
+
+header {
+background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+color: white;
+padding: 30px;
+text-align: center;
+}
+
+h1 {
+font-size: 2.5em;
+margin-bottom: 10px;
+}
+
+.subtitle {
+font-size: 1.1em;
+opacity: 0.9;
+}
+
+.table-container {
+overflow-x: auto;
+padding: 20px;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+background: white;
+}
+
+thead {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+}
+
+th {
+padding: 15px;
+text-align: left;
+font-size: 1.1em;
+font-weight: 600;
+}
+
+td {
+padding: 12px 15px;
+border-bottom: 1px solid #e2e8f0;
+}
+
+tbody tr:hover {
+background: #f7fafc;
+transition: background 0.2s;
+}
+
+.category {
+background: #edf2f7;
+font-weight: bold;
+color: #2d3748;
+font-size: 1.1em;
+}
+
+code {
+background: #2d3748;
+color: #a0e9fd;
+padding: 3px 8px;
+border-radius: 4px;
+font-family: 'Courier New', monospace;
+font-size: 0.95em;
+}
+
+.concept {
+font-weight: 600;
+color: #2d3748;
+}
+
+.python-col {
+background: #fef3c7;
+}
+
+.java-col {
+background: #dbeafe;
+}
+
+@media (max-width: 768px) {
+h1 {
+font-size: 1.8em;
+}
+
+th, td {
+padding: 10px;
+font-size: 0.9em;
+}
+}
+</style>
+```
+
+</head>
+<body>
+<div class="container">
+<header>
+<h1>Python ↔️ Java</h1>
+<p class="subtitle">Guide de transition : Commandes et syntaxe équivalentes</p>
+</header>
+
+```
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="width: 25%">Concept</th>
+<th style="width: 37.5%">Python</th>
+<th style="width: 37.5%">Java</th>
+</tr>
+</thead>
+<tbody>
+<!-- Affichage -->
+<tr class="category">
+<td colspan="3">AFFICHAGE</td>
+</tr>
+<tr>
+<td class="concept">Afficher du texte</td>
+<td><code>print("Hello")</code></td>
+<td><code>System.out.println("Hello");</code></td>
+</tr>
+<tr>
+<td class="concept">Afficher sans retour ligne</td>
+<td><code>print("Hi", end="")</code></td>
+<td><code>System.out.print("Hi");</code></td>
+</tr>
+
+<!-- Variables -->
+<tr class="category">
+<td colspan="3">VARIABLES & TYPES</td>
+</tr>
+<tr>
+<td class="concept">Déclaration variable</td>
+<td><code>x = 5</code></td>
+<td><code>int x = 5;</code></td>
+</tr>
+<tr>
+<td class="concept">Constante</td>
+<td><code>MAX = 100</code> (convention)</td>
+<td><code>final int MAX = 100;</code></td>
+</tr>
+<tr>
+<td class="concept">Entier</td>
+<td><code>age = 25</code></td>
+<td><code>int age = 25;</code></td>
+</tr>
+<tr>
+<td class="concept">Décimal</td>
+<td><code>pi = 3.14</code></td>
+<td><code>double pi = 3.14;</code></td>
+</tr>
+<tr>
+<td class="concept">Texte</td>
+<td><code>nom = "Alice"</code></td>
+<td><code>String nom = "Alice";</code></td>
+</tr>
+<tr>
+<td class="concept">Booléen</td>
+<td><code>actif = True</code></td>
+<td><code>boolean actif = true;</code></td>
+</tr>
+
+<!-- Opérateurs -->
+<tr class="category">
+<td colspan="3">OPÉRATEURS</td>
+</tr>
+<tr>
+<td class="concept">Addition</td>
+<td><code>a + b</code></td>
+<td><code>a + b</code></td>
+</tr>
+<tr>
+<td class="concept">Division entière</td>
+<td><code>a // b</code></td>
+<td><code>a / b</code> (si int)</td>
+</tr>
+<tr>
+<td class="concept">Modulo</td>
+<td><code>a % b</code></td>
+<td><code>a % b</code></td>
+</tr>
+<tr>
+<td class="concept">Puissance</td>
+<td><code>a ** b</code></td>
+<td><code>Math.pow(a, b)</code></td>
+</tr>
+<tr>
+<td class="concept">Incrément</td>
+<td><code>x += 1</code></td>
+<td><code>x++</code> ou <code>x += 1</code></td>
+</tr>
+
+<!-- Conditions -->
+<tr class="category">
+<td colspan="3">CONDITIONS</td>
+</tr>
+<tr>
+<td class="concept">Si</td>
+<td><code>if x > 0:</code></td>
+<td><code>if (x > 0) {</code></td>
+</tr>
+<tr>
+<td class="concept">Sinon si</td>
+<td><code>elif x < 0:</code></td>
+<td><code>} else if (x < 0) {</code></td>
+</tr>
+<tr>
+<td class="concept">Sinon</td>
+<td><code>else:</code></td>
+<td><code>} else {</code></td>
+</tr>
+<tr>
+<td class="concept">ET logique</td>
+<td><code>and</code></td>
+<td><code>&&</code></td>
+</tr>
+<tr>
+<td class="concept">OU logique</td>
+<td><code>or</code></td>
+<td><code>||</code></td>
+</tr>
+<tr>
+<td class="concept">NON logique</td>
+<td><code>not</code></td>
+<td><code>!</code></td>
+</tr>
+
+<!-- Boucles -->
+<tr class="category">
+<td colspan="3">BOUCLES</td>
+</tr>
+<tr>
+<td class="concept">Boucle for (range)</td>
+<td><code>for i in range(5):</code></td>
+<td><code>for (int i=0; i<5; i++) {</code></td>
+</tr>
+<tr>
+<td class="concept">Boucle for (liste)</td>
+<td><code>for item in liste:</code></td>
+<td><code>for (Type item : liste) {</code></td>
+</tr>
+<tr>
+<td class="concept">Boucle while</td>
+<td><code>while x > 0:</code></td>
+<td><code>while (x > 0) {</code></td>
+</tr>
+<tr>
+<td class="concept">Sortir de boucle</td>
+<td><code>break</code></td>
+<td><code>break;</code></td>
+</tr>
+<tr>
+<td class="concept">Passer à l'itération suivante</td>
+<td><code>continue</code></td>
+<td><code>continue;</code></td>
+</tr>
+
+<!-- Listes/Tableaux -->
+<tr class="category">
+<td colspan="3">LISTES & TABLEAUX</td>
+</tr>
+<tr>
+<td class="concept">Créer une liste</td>
+<td><code>liste = [1, 2, 3]</code></td>
+<td><code>int[] liste = {1, 2, 3};</code></td>
+</tr>
+<tr>
+<td class="concept">Liste dynamique</td>
+<td><code>liste = []</code></td>
+<td><code>ArrayList<Integer> liste = new ArrayList<>();</code></td>
+</tr>
+<tr>
+<td class="concept">Accéder à un élément</td>
+<td><code>liste[0]</code></td>
+<td><code>liste[0]</code> ou <code>liste.get(0)</code></td>
+</tr>
+<tr>
+<td class="concept">Ajouter un élément</td>
+<td><code>liste.append(4)</code></td>
+<td><code>liste.add(4);</code></td>
+</tr>
+<tr>
+<td class="concept">Longueur</td>
+<td><code>len(liste)</code></td>
+<td><code>liste.length</code> ou <code>liste.size()</code></td>
+</tr>
+
+<!-- Fonctions -->
+<tr class="category">
+<td colspan="3">FONCTIONS</td>
+</tr>
+<tr>
+<td class="concept">Définir une fonction</td>
+<td><code>def ma_fonction():</code></td>
+<td><code>public static void maFonction() {</code></td>
+</tr>
+<tr>
+<td class="concept">Avec paramètres</td>
+<td><code>def add(a, b):</code></td>
+<td><code>public static int add(int a, int b) {</code></td>
+</tr>
+<tr>
+<td class="concept">Retourner une valeur</td>
+<td><code>return resultat</code></td>
+<td><code>return resultat;</code></td>
+</tr>
+<tr>
+<td class="concept">Appeler une fonction</td>
+<td><code>ma_fonction()</code></td>
+<td><code>maFonction();</code></td>
+</tr>
+
+<!-- Entrée utilisateur -->
+<tr class="category">
+<td colspan="3">ENTRÉE UTILISATEUR</td>
+</tr>
+<tr>
+<td class="concept">Lire texte</td>
+<td><code>input("Nom: ")</code></td>
+<td><code>Scanner sc = new Scanner(System.in);<br>sc.nextLine();</code></td>
+</tr>
+<tr>
+<td class="concept">Lire entier</td>
+<td><code>int(input())</code></td>
+<td><code>sc.nextInt();</code></td>
+</tr>
+
+<!-- Chaînes -->
+<tr class="category">
+<td colspan="3">MANIPULATION DE TEXTE</td>
+</tr>
+<tr>
+<td class="concept">Concaténation</td>
+<td><code>"Hello " + "World"</code></td>
+<td><code>"Hello " + "World"</code></td>
+</tr>
+<tr>
+<td class="concept">Longueur</td>
+<td><code>len(texte)</code></td>
+<td><code>texte.length()</code></td>
+</tr>
+<tr>
+<td class="concept">Majuscules</td>
+<td><code>texte.upper()</code></td>
+<td><code>texte.toUpperCase()</code></td>
+</tr>
+<tr>
+<td class="concept">Minuscules</td>
+<td><code>texte.lower()</code></td>
+<td><code>texte.toLowerCase()</code></td>
+</tr>
+
+<!-- Commentaires -->
+<tr class="category">
+<td colspan="3">COMMENTAIRES</td>
+</tr>
+<tr>
+<td class="concept">Commentaire ligne</td>
+<td><code># Commentaire</code></td>
+<td><code>// Commentaire</code></td>
+</tr>
+<tr>
+<td class="concept">Commentaire bloc</td>
+<td><code>"""<br>Bloc<br>"""</code></td>
+<td><code>/*<br>Bloc<br>*/</code></td>
+</tr>
+
+<!-- Classes -->
+<tr class="category">
+<td colspan="3">PROGRAMMATION ORIENTÉE OBJET</td>
+</tr>
+<tr>
+<td class="concept">Définir une classe</td>
+<td><code>class Personne:</code></td>
+<td><code>public class Personne {</code></td>
+</tr>
+<tr>
+<td class="concept">Constructeur</td>
+<td><code>def __init__(self, nom):</code></td>
+<td><code>public Personne(String nom) {</code></td>
+</tr>
+<tr>
+<td class="concept">Créer objet</td>
+<td><code>p = Personne("Alice")</code></td>
+<td><code>Personne p = new Personne("Alice");</code></td>
+</tr>
+<tr>
+<td class="concept">Attribut de classe</td>
+<td><code>self.nom = nom</code></td>
+<td><code>this.nom = nom;</code></td>
+</tr>
+<tr>
+<td class="concept">Méthode</td>
+<td><code>def saluer(self):</code></td>
+<td><code>public void saluer() {</code></td>
+</tr>
+
+<!-- Gestion d'erreurs -->
+<tr class="category">
+<td colspan="3">GESTION D'ERREURS</td>
+</tr>
+<tr>
+<td class="concept">Bloc try</td>
+<td><code>try:</code></td>
+<td><code>try {</code></td>
+</tr>
+<tr>
+<td class="concept">Capturer exception</td>
+<td><code>except ValueError:</code></td>
+<td><code>} catch (Exception e) {</code></td>
+</tr>
+<tr>
+<td class="concept">Capturer toute exception</td>
+<td><code>except Exception:</code></td>
+<td><code>} catch (Exception e) {</code></td>
+</tr>
+<tr>
+<td class="concept">Bloc finally</td>
+<td><code>finally:</code></td>
+<td><code>} finally {</code></td>
+</tr>
+<tr>
+<td class="concept">Lever une exception</td>
+<td><code>raise ValueError("Erreur")</code></td>
+<td><code>throw new Exception("Erreur");</code></td>
+</tr>
+
+<!-- Dictionnaires/Maps -->
+<tr class="category">
+<td colspan="3">DICTIONNAIRES & MAPS</td>
+</tr>
+<tr>
+<td class="concept">Créer un dictionnaire</td>
+<td><code>d = {"nom": "Alice", "age": 25}</code></td>
+<td><code>HashMap<String, Object> d = new HashMap<>();</code></td>
+</tr>
+<tr>
+<td class="concept">Ajouter/Modifier valeur</td>
+<td><code>d["nom"] = "Bob"</code></td>
+<td><code>d.put("nom", "Bob");</code></td>
+</tr>
+<tr>
+<td class="concept">Accéder à valeur</td>
+<td><code>d["nom"]</code></td>
+<td><code>d.get("nom")</code></td>
+</tr>
+<tr>
+<td class="concept">Vérifier clé existe</td>
+<td><code>"nom" in d</code></td>
+<td><code>d.containsKey("nom")</code></td>
+</tr>
+<tr>
+<td class="concept">Supprimer clé</td>
+<td><code>del d["nom"]</code></td>
+<td><code>d.remove("nom");</code></td>
+</tr>
+<tr>
+<td class="concept">Parcourir dict/map</td>
+<td><code>for key, val in d.items():</code></td>
+<td><code>for (Map.Entry<K,V> e : d.entrySet()) {</code></td>
+</tr>
+
+<!-- Fichiers -->
+<tr class="category">
+<td colspan="3">FICHIERS</td>
+</tr>
+<tr>
+<td class="concept">Ouvrir fichier lecture</td>
+<td><code>with open("file.txt", "r") as f:</code></td>
+<td><code>FileReader fr = new FileReader("file.txt");<br>BufferedReader br = new BufferedReader(fr);</code></td>
+</tr>
+<tr>
+<td class="concept">Lire tout le fichier</td>
+<td><code>contenu = f.read()</code></td>
+<td><code>Files.readString(Path.of("file.txt"));</code></td>
+</tr>
+<tr>
+<td class="concept">Lire ligne par ligne</td>
+<td><code>for ligne in f:</code></td>
+<td><code>String ligne; while((ligne = br.readLine()) != null) {</code></td>
+</tr>
+<tr>
+<td class="concept">Écrire dans fichier</td>
+<td><code>with open("file.txt", "w") as f:<br>&nbsp;&nbsp;f.write("texte")</code></td>
+<td><code>FileWriter fw = new FileWriter("file.txt");<br>fw.write("texte");<br>fw.close();</code></td>
+</tr>
+
+<!-- Imports -->
+<tr class="category">
+<td colspan="3">IMPORTS & MODULES</td>
+</tr>
+<tr>
+<td class="concept">Importer module</td>
+<td><code>import math</code></td>
+<td><code>import java.util.*;</code></td>
+</tr>
+<tr>
+<td class="concept">Import spécifique</td>
+<td><code>from math import sqrt</code></td>
+<td><code>import java.lang.Math.sqrt;</code></td>
+</tr>
+<tr>
+<td class="concept">Alias d'import</td>
+<td><code>import numpy as np</code></td>
+<td><code>-</code> (pas d'alias en Java)</td>
+</tr>
+
+<!-- Null/None -->
+<tr class="category">
+<td colspan="3">VALEURS NULLES</td>
+</tr>
+<tr>
+<td class="concept">Valeur nulle</td>
+<td><code>None</code></td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td class="concept">Vérifier si null</td>
+<td><code>if x is None:</code></td>
+<td><code>if (x == null) {</code></td>
+</tr>
+<tr>
+<td class="concept">Vérifier si non null</td>
+<td><code>if x is not None:</code></td>
+<td><code>if (x != null) {</code></td>
+</tr>
+
+<!-- String formatting -->
+<tr class="category">
+<td colspan="3">FORMATAGE DE TEXTE</td>
+</tr>
+<tr>
+<td class="concept">F-string / Interpolation</td>
+<td><code>f"Bonjour {nom}"</code></td>
+<td><code>String.format("Bonjour %s", nom)</code></td>
+</tr>
+<tr>
+<td class="concept">Format avec variables</td>
+<td><code>f"{age} ans"</code></td>
+<td><code>age + " ans"</code></td>
+</tr>
+<tr>
+<td class="concept">Méthode format</td>
+<td><code>"Hello {}".format(nom)</code></td>
+<td><code>String.format("Hello %s", nom)</code></td>
+</tr>
+
+<!-- Méthodes utiles -->
+<tr class="category">
+<td colspan="3">MÉTHODES UTILES</td>
+</tr>
+<tr>
+<td class="concept">Conversion en string</td>
+<td><code>str(42)</code></td>
+<td><code>String.valueOf(42)</code> ou <code>Integer.toString(42)</code></td>
+</tr>
+<tr>
+<td class="concept">Conversion en int</td>
+<td><code>int("42")</code></td>
+<td><code>Integer.parseInt("42")</code></td>
+</tr>
+<tr>
+<td class="concept">Conversion en float</td>
+<td><code>float("3.14")</code></td>
+<td><code>Double.parseDouble("3.14")</code></td>
+</tr>
+<tr>
+<td class="concept">Arrondir</td>
+<td><code>round(3.7)</code></td>
+<td><code>Math.round(3.7)</code></td>
+</tr>
+<tr>
+<td class="concept">Valeur absolue</td>
+<td><code>abs(-5)</code></td>
+<td><code>Math.abs(-5)</code></td>
+</tr>
+<tr>
+<td class="concept">Min/Max</td>
+<td><code>min(a, b)</code> / <code>max(a, b)</code></td>
+<td><code>Math.min(a, b)</code> / <code>Math.max(a, b)</code></td>
+</tr>
+
+<!-- Programme principal -->
+<tr class="category">
+<td colspan="3">STRUCTURE PROGRAMME</td>
+</tr>
+<tr>
+<td class="concept">Point d'entrée</td>
+<td><code>if __name__ == "__main__":</code></td>
+<td><code>public static void main(String[] args) {</code></td>
+</tr>
+<tr>
+<td class="concept">Arguments ligne commande</td>
+<td><code>import sys<br>sys.argv</code></td>
+<td><code>args[0], args[1]...</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+```
+
+</body>
+</html>

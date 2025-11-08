@@ -12,42 +12,39 @@ box-sizing: border-box;
 }
 
 :root {
---bg-primary: #f8fafc;
+--bg-primary: #f8f9fa;
 --bg-secondary: #ffffff;
---bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
---text-primary: #1e293b;
---text-secondary: #64748b;
---border-color: #e2e8f0;
---hover-bg: #f1f5f9;
---category-bg: #f1f5f9;
---category-text: #334155;
---code-bg: #1e293b;
---code-text: #a0e9fd;
---python-bg: #fef3c7;
---java-bg: #dbeafe;
---shadow: 0 20px 60px rgba(0,0,0,0.1);
+--bg-gradient: linear-gradient(135deg, #5b8fd8 0%, #4a7cc2 100%);
+--text-primary: #2c3e50;
+--text-secondary: #7f8c8d;
+--border-color: #e1e4e8;
+--hover-bg: #f6f8fa;
+--category-bg: #f6f8fa;
+--category-text: #2c3e50;
+--code-bg: #2d3748;
+--code-text: #81e6d9;
+--shadow: 0 2px 12px rgba(0,0,0,0.08);
 --transition: 0.3s ease;
+--green: #48bb78;
 }
 
 [data-theme="dark"] {
---bg-primary: #0f172a;
---bg-secondary: #1e293b;
---bg-gradient: linear-gradient(135deg, #4c1d95 0%, #581c87 100%);
---text-primary: #f1f5f9;
---text-secondary: #94a3b8;
---border-color: #334155;
---hover-bg: #334155;
---category-bg: #334155;
+--bg-primary: #1a1f2e;
+--bg-secondary: #242b3d;
+--bg-gradient: linear-gradient(135deg, #4a5f7f 0%, #3d4e6a 100%);
+--text-primary: #e2e8f0;
+--text-secondary: #a0aec0;
+--border-color: #374151;
+--hover-bg: #2d3748;
+--category-bg: #2d3748;
 --category-text: #e2e8f0;
---code-bg: #0f172a;
---code-text: #7dd3fc;
---python-bg: #422006;
---java-bg: #1e3a8a;
---shadow: 0 20px 60px rgba(0,0,0,0.5);
+--code-bg: #1a202c;
+--code-text: #9ae6b4;
+--shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
 
 body {
-font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 background: var(--bg-primary);
 padding: 20px;
 min-height: 100vh;
@@ -58,10 +55,11 @@ transition: background var(--transition);
 max-width: 1400px;
 margin: 0 auto;
 background: var(--bg-secondary);
-border-radius: 20px;
+border-radius: 12px;
 box-shadow: var(--shadow);
 overflow: hidden;
 transition: all var(--transition);
+border: 1px solid var(--border-color);
 }
 
 header {
@@ -219,10 +217,11 @@ font-weight: 600;
 }
 
 td {
-padding: 14px 15px;
+padding: 16px 15px;
 border-bottom: 1px solid var(--border-color);
 color: var(--text-primary);
 transition: all var(--transition);
+vertical-align: top;
 }
 
 tbody tr {
@@ -231,7 +230,6 @@ transition: all var(--transition);
 
 tbody tr:hover {
 background: var(--hover-bg);
-transform: scale(1.001);
 }
 
 tbody tr.hidden {
@@ -257,11 +255,16 @@ font-size: 0.92em;
 display: inline-block;
 line-height: 1.6;
 transition: all var(--transition);
+cursor: pointer;
 }
 
 code:hover {
 transform: scale(1.02);
-box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+code.copied {
+background: var(--green) !important;
 }
 
 .concept {
@@ -269,12 +272,11 @@ font-weight: 600;
 color: var(--text-primary);
 }
 
-.python-col {
-background: var(--python-bg);
-}
-
-.java-col {
-background: var(--java-bg);
+.warning-icon {
+color: #e53e3e;
+font-size: 1.1em;
+cursor: help;
+margin-left: 4px;
 }
 
 .no-results {
@@ -350,7 +352,7 @@ animation: fadeIn 0.3s ease;
 <div class="header-content">
 <div class="header-text">
 <h1>Python ↔️ Java</h1>
-<p class="subtitle">Guide de transition : Commandes et syntaxe équivalentes</p>
+<p class="subtitle">Guide de transition complet : Commandes et syntaxe équivalentes</p>
 </div>
 <div class="controls">
 <div class="search-box">
@@ -447,7 +449,7 @@ animation: fadeIn 0.3s ease;
 <td><code>a + b</code></td>
 </tr>
 <tr>
-<td class="concept">Division entière</td>
+<td class="concept">Division entière<span class="warning-icon" title="Attention: comportement différent!">⚠️</span></td>
 <td><code>a // b</code></td>
 <td><code>a / b</code></td>
 </tr>
@@ -501,6 +503,11 @@ animation: fadeIn 0.3s ease;
 <td><code>not</code></td>
 <td><code>!</code></td>
 </tr>
+<tr>
+<td class="concept">Opérateur ternaire</td>
+<td><code>x if condition else y</code></td>
+<td><code>condition ? x : y</code></td>
+</tr>
 
 <!-- BOUCLES -->
 <tr class="category">
@@ -531,6 +538,16 @@ animation: fadeIn 0.3s ease;
 <td><code>continue</code></td>
 <td><code>continue;</code></td>
 </tr>
+<tr>
+<td class="concept">Enumerate (index + valeur)</td>
+<td><code>for i, val in enumerate(liste):</code></td>
+<td><code>for (int i=0; i<liste.size(); i++) {<br>&nbsp;&nbsp;val = liste.get(i);<br>}</code></td>
+</tr>
+<tr>
+<td class="concept">Range avec step</td>
+<td><code>for i in range(0, 10, 2):</code></td>
+<td><code>for (int i=0; i<10; i+=2) {</code></td>
+</tr>
 
 <!-- LISTES -->
 <tr class="category">
@@ -549,7 +566,7 @@ animation: fadeIn 0.3s ease;
 <tr>
 <td class="concept">Accéder à un élément</td>
 <td><code>liste[0]</code></td>
-<td><code>liste[0]</code></td>
+<td><code>liste[0] ou liste.get(0)</code></td>
 </tr>
 <tr>
 <td class="concept">Ajouter un élément</td>
@@ -559,7 +576,62 @@ animation: fadeIn 0.3s ease;
 <tr>
 <td class="concept">Longueur</td>
 <td><code>len(liste)</code></td>
-<td><code>liste.length</code></td>
+<td><code>liste.length ou liste.size()</code></td>
+</tr>
+<tr>
+<td class="concept">Slicing (extraction)</td>
+<td><code>liste[1:4]</code></td>
+<td><code>liste.subList(1, 4)</code></td>
+</tr>
+<tr>
+<td class="concept">Index négatif</td>
+<td><code>liste[-1]</code></td>
+<td><code>liste[liste.length - 1]</code></td>
+</tr>
+<tr>
+<td class="concept">Compréhension de liste</td>
+<td><code>[x*2 for x in range(5)]</code></td>
+<td><code>IntStream.range(0,5).map(x->x*2).toArray()</code></td>
+</tr>
+<tr>
+<td class="concept">Vérifier présence</td>
+<td><code>if x in liste:</code></td>
+<td><code>if (liste.contains(x)) {</code></td>
+</tr>
+<tr>
+<td class="concept">Inverser une liste</td>
+<td><code>liste.reverse()</code></td>
+<td><code>Collections.reverse(liste);</code></td>
+</tr>
+<tr>
+<td class="concept">Trier une liste</td>
+<td><code>liste.sort()</code></td>
+<td><code>Collections.sort(liste);</code></td>
+</tr>
+
+<!-- TUPLES & SETS -->
+<tr class="category">
+<td colspan="3">🎯 TUPLES & SETS</td>
+</tr>
+<tr>
+<td class="concept">Tuple (immuable)</td>
+<td><code>t = (1, 2, 3)</code></td>
+<td><code>// Pas d'équivalent direct</code></td>
+</tr>
+<tr>
+<td class="concept">Unpacking</td>
+<td><code>a, b, c = (1, 2, 3)</code></td>
+<td><code>// Pas d'équivalent direct</code></td>
+</tr>
+<tr>
+<td class="concept">Set (ensemble)</td>
+<td><code>s = {1, 2, 3}</code></td>
+<td><code>Set<Integer> s = new HashSet<>(Arrays.asList(1,2,3));</code></td>
+</tr>
+<tr>
+<td class="concept">Ajouter à un set</td>
+<td><code>s.add(4)</code></td>
+<td><code>s.add(4);</code></td>
 </tr>
 
 <!-- FONCTIONS -->
@@ -586,6 +658,31 @@ animation: fadeIn 0.3s ease;
 <td><code>ma_fonction()</code></td>
 <td><code>maFonction();</code></td>
 </tr>
+<tr>
+<td class="concept">Paramètre par défaut</td>
+<td><code>def func(a, b=5):</code></td>
+<td><code>// Surcharge de méthode nécessaire</code></td>
+</tr>
+<tr>
+<td class="concept">Lambda (fonction anonyme)</td>
+<td><code>lambda x: x * 2</code></td>
+<td><code>x -> x * 2</code></td>
+</tr>
+<tr>
+<td class="concept">Map sur liste</td>
+<td><code>list(map(lambda x: x*2, liste))</code></td>
+<td><code>liste.stream().map(x -> x*2).collect(Collectors.toList())</code></td>
+</tr>
+<tr>
+<td class="concept">Filter sur liste</td>
+<td><code>list(filter(lambda x: x>0, liste))</code></td>
+<td><code>liste.stream().filter(x -> x>0).collect(Collectors.toList())</code></td>
+</tr>
+<tr>
+<td class="concept">Zip (combiner listes)</td>
+<td><code>list(zip(a, b))</code></td>
+<td><code>// Pas d'équivalent direct simple</code></td>
+</tr>
 
 <!-- ENTRÉE UTILISATEUR -->
 <tr class="category">
@@ -594,7 +691,7 @@ animation: fadeIn 0.3s ease;
 <tr>
 <td class="concept">Lire texte</td>
 <td><code>input("Nom: ")</code></td>
-<td><code>Scanner sc = new Scanner(System.in); sc.nextLine();</code></td>
+<td><code>Scanner sc = new Scanner(System.in);<br>sc.nextLine();</code></td>
 </tr>
 <tr>
 <td class="concept">Lire entier</td>
@@ -625,6 +722,31 @@ animation: fadeIn 0.3s ease;
 <td class="concept">Minuscules</td>
 <td><code>texte.lower()</code></td>
 <td><code>texte.toLowerCase()</code></td>
+</tr>
+<tr>
+<td class="concept">Split (découper)</td>
+<td><code>texte.split(",")</code></td>
+<td><code>texte.split(",")</code></td>
+</tr>
+<tr>
+<td class="concept">Join (joindre)</td>
+<td><code>",".join(liste)</code></td>
+<td><code>String.join(",", liste)</code></td>
+</tr>
+<tr>
+<td class="concept">Strip (enlever espaces)</td>
+<td><code>texte.strip()</code></td>
+<td><code>texte.trim()</code></td>
+</tr>
+<tr>
+<td class="concept">Replace</td>
+<td><code>texte.replace("a", "b")</code></td>
+<td><code>texte.replace("a", "b")</code></td>
+</tr>
+<tr>
+<td class="concept">Substring</td>
+<td><code>texte[0:5]</code></td>
+<td><code>texte.substring(0, 5)</code></td>
 </tr>
 
 <!-- COMMENTAIRES -->
@@ -671,6 +793,21 @@ animation: fadeIn 0.3s ease;
 <td><code>def saluer(self):</code></td>
 <td><code>public void saluer() {</code></td>
 </tr>
+<tr>
+<td class="concept">Héritage</td>
+<td><code>class Dog(Animal):</code></td>
+<td><code>public class Dog extends Animal {</code></td>
+</tr>
+<tr>
+<td class="concept">Interface</td>
+<td><code># Classe abstraite ou Protocol</code></td>
+<td><code>public interface Comparable {</code></td>
+</tr>
+<tr>
+<td class="concept">Méthode abstraite</td>
+<td><code>from abc import ABC, abstractmethod</code></td>
+<td><code>abstract void method();</code></td>
+</tr>
 
 <!-- GESTION D'ERREURS -->
 <tr class="category">
@@ -684,7 +821,7 @@ animation: fadeIn 0.3s ease;
 <tr>
 <td class="concept">Capturer exception</td>
 <td><code>except ValueError:</code></td>
-<td><code>} catch (Exception e) {</code></td>
+<td><code>} catch (ValueError e) {</code></td>
 </tr>
 <tr>
 <td class="concept">Bloc finally</td>
@@ -696,6 +833,11 @@ animation: fadeIn 0.3s ease;
 <td><code>raise ValueError("Erreur")</code></td>
 <td><code>throw new Exception("Erreur");</code></td>
 </tr>
+<tr>
+<td class="concept">Context manager (with)</td>
+<td><code>with open("f.txt") as f:</code></td>
+<td><code>try (FileReader f = new FileReader("f.txt")) {</code></td>
+</tr>
 
 <!-- DICTIONNAIRES -->
 <tr class="category">
@@ -704,7 +846,7 @@ animation: fadeIn 0.3s ease;
 <tr>
 <td class="concept">Créer un dictionnaire</td>
 <td><code>d = {"nom": "Alice"}</code></td>
-<td><code>HashMap<String, Object> d = new HashMap<>();</code></td>
+<td><code>HashMap<String, String> d = new HashMap<>();</code></td>
 </tr>
 <tr>
 <td class="concept">Ajouter/Modifier valeur</td>
@@ -720,6 +862,21 @@ animation: fadeIn 0.3s ease;
 <td class="concept">Vérifier clé existe</td>
 <td><code>"nom" in d</code></td>
 <td><code>d.containsKey("nom")</code></td>
+</tr>
+<tr>
+<td class="concept">Parcourir dictionnaire</td>
+<td><code>for k, v in d.items():</code></td>
+<td><code>for (Map.Entry<K,V> e : d.entrySet()) {</code></td>
+</tr>
+<tr>
+<td class="concept">Clés du dictionnaire</td>
+<td><code>d.keys()</code></td>
+<td><code>d.keySet()</code></td>
+</tr>
+<tr>
+<td class="concept">Valeurs du dictionnaire</td>
+<td><code>d.values()</code></td>
+<td><code>d.values()</code></td>
 </tr>
 
 <!-- FICHIERS -->
@@ -738,8 +895,13 @@ animation: fadeIn 0.3s ease;
 </tr>
 <tr>
 <td class="concept">Écrire dans fichier</td>
-<td><code>with open("file.txt", "w") as f: f.write("texte")</code></td>
-<td><code>FileWriter fw = new FileWriter("file.txt"); fw.write("texte");</code></td>
+<td><code>with open("file.txt", "w") as f:<br>&nbsp;&nbsp;f.write("texte")</code></td>
+<td><code>FileWriter fw = new FileWriter("file.txt");<br>fw.write("texte");</code></td>
+</tr>
+<tr>
+<td class="concept">Lire tout le fichier</td>
+<td><code>f.read()</code></td>
+<td><code>Files.readString(Path.of("file.txt"))</code></td>
 </tr>
 
 <!-- IMPORTS -->
@@ -756,6 +918,11 @@ animation: fadeIn 0.3s ease;
 <td><code>from math import sqrt</code></td>
 <td><code>import static java.lang.Math.sqrt;</code></td>
 </tr>
+<tr>
+<td class="concept">Import avec alias</td>
+<td><code>import numpy as np</code></td>
+<td><code>// Pas d'équivalent direct</code></td>
+</tr>
 
 <!-- NULL -->
 <tr class="category">
@@ -771,6 +938,11 @@ animation: fadeIn 0.3s ease;
 <td><code>if x is None:</code></td>
 <td><code>if (x == null) {</code></td>
 </tr>
+<tr>
+<td class="concept">Valeur par défaut si null</td>
+<td><code>x or "default"</code></td>
+<td><code>x != null ? x : "default"</code></td>
+</tr>
 
 <!-- FORMATAGE -->
 <tr class="category">
@@ -785,6 +957,11 @@ animation: fadeIn 0.3s ease;
 <td class="concept">Format avec variables</td>
 <td><code>f"{age} ans"</code></td>
 <td><code>age + " ans"</code></td>
+</tr>
+<tr>
+<td class="concept">Format nombre décimal</td>
+<td><code>f"{pi:.2f}"</code></td>
+<td><code>String.format("%.2f", pi)</code></td>
 </tr>
 
 <!-- MÉTHODES UTILES -->
@@ -816,6 +993,21 @@ animation: fadeIn 0.3s ease;
 <td><code>min(a, b)</code></td>
 <td><code>Math.min(a, b)</code></td>
 </tr>
+<tr>
+<td class="concept">Racine carrée</td>
+<td><code>math.sqrt(16)</code></td>
+<td><code>Math.sqrt(16)</code></td>
+</tr>
+<tr>
+<td class="concept">Nombre aléatoire</td>
+<td><code>import random; random.random()</code></td>
+<td><code>Math.random()</code></td>
+</tr>
+<tr>
+<td class="concept">Type d'une variable</td>
+<td><code>type(x)</code></td>
+<td><code>x.getClass()</code></td>
+</tr>
 
 <!-- STRUCTURE PROGRAMME -->
 <tr class="category">
@@ -831,6 +1023,36 @@ animation: fadeIn 0.3s ease;
 <td><code>import sys; sys.argv</code></td>
 <td><code>args[0], args[1]...</code></td>
 </tr>
+
+<!-- AUTRES -->
+<tr class="category">
+<td colspan="3">🎁 DIVERS</td>
+</tr>
+<tr>
+<td class="concept">Décorateur</td>
+<td><code>@decorator</code></td>
+<td><code>@Annotation</code></td>
+</tr>
+<tr>
+<td class="concept">Generics (types paramétrés)</td>
+<td><code># Duck typing</code></td>
+<td><code>List<String> liste = new ArrayList<>();</code></td>
+</tr>
+<tr>
+<td class="concept">Assert (test)</td>
+<td><code>assert x > 0</code></td>
+<td><code>assert x > 0;</code></td>
+</tr>
+<tr>
+<td class="concept">Pause/Sleep</td>
+<td><code>import time; time.sleep(1)</code></td>
+<td><code>Thread.sleep(1000);</code></td>
+</tr>
+<tr>
+<td class="concept">Afficher type</td>
+<td><code>print(type(x))</code></td>
+<td><code>System.out.println(x.getClass());</code></td>
+</tr>
 </tbody>
 </table>
 
@@ -842,7 +1064,7 @@ animation: fadeIn 0.3s ease;
 </div>
 
 <footer>
-<p>💡 Astuce : Cliquez sur le code pour le copier | Créé par un 👽 pour les 👽</p>
+<p>💡 Astuce : Cliquez sur le code pour le copier | Créé avec ❤️ pour les développeurs</p>
 </footer>
 </div>
 
@@ -856,8 +1078,9 @@ const totalCount = document.getElementById('totalCount');
 const visibleCount = document.getElementById('visibleCount');
 const categoryCount = document.getElementById('categoryCount');
 
-// Theme management (sans localStorage)
-document.documentElement.setAttribute('data-theme', 'light');
+// Theme management
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
 
 themeToggle.addEventListener('click', () => {
 const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -876,21 +1099,15 @@ visibleCount.textContent = visible;
 categoryCount.textContent = categories.length;
 }
 
-searchInput.addEventListener('input', (e) => {
-const searchTerm = e.target.value.toLowerCase().trim();
+function applyFilters() {
+const searchTerm = searchInput.value.toLowerCase().trim();
 let hasResults = false;
-
-if (searchTerm === '') {
-allRows.forEach(row => row.classList.remove('hidden'));
-categories.forEach(cat => cat.style.display = '');
-noResults.classList.remove('visible');
-updateStats();
-return;
-}
 
 allRows.forEach(row => {
 const text = row.textContent.toLowerCase();
-if (text.includes(searchTerm)) {
+const matchesSearch = searchTerm === '' || text.includes(searchTerm);
+
+if (matchesSearch) {
 row.classList.remove('hidden');
 hasResults = true;
 } else {
@@ -911,34 +1128,42 @@ nextRow = nextRow.nextElementSibling;
 cat.style.display = hasVisibleRows ? '' : 'none';
 });
 
-if (!hasResults) {
-noResults.classList.add('visible');
-} else {
-noResults.classList.remove('visible');
+noResults.classList.toggle('visible', !hasResults);
+updateStats();
 }
 
-updateStats();
-});
+searchInput.addEventListener('input', applyFilters);
 
 // Initialize stats
 updateStats();
 
 // Copy code on click
 document.querySelectorAll('code').forEach(code => {
-code.style.cursor = 'pointer';
 code.title = 'Cliquer pour copier';
 code.addEventListener('click', async () => {
 try {
 await navigator.clipboard.writeText(code.textContent);
-const originalBg = code.style.background;
-code.style.background = '#10b981';
+code.classList.add('copied');
 setTimeout(() => {
-code.style.background = originalBg;
-}, 200);
+code.classList.remove('copied');
+}, 300);
 } catch (err) {
 console.log('Copie non disponible');
 }
 });
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+if (e.key === '/' && document.activeElement !== searchInput) {
+e.preventDefault();
+searchInput.focus();
+}
+if (e.key === 'Escape') {
+searchInput.value = '';
+searchInput.blur();
+applyFilters();
+}
 });
 </script>
 </body>

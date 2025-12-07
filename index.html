@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -12,38 +11,183 @@ padding: 0;
 box-sizing: border-box;
 }
 
-```
+:root {
+--bg-primary: #f8f9fa;
+--bg-secondary: #ffffff;
+--bg-gradient: linear-gradient(135deg, #5b8fd8 0%, #4a7cc2 100%);
+--text-primary: #2c3e50;
+--text-secondary: #7f8c8d;
+--border-color: #e1e4e8;
+--hover-bg: #f6f8fa;
+--category-bg: #f6f8fa;
+--category-text: #2c3e50;
+--code-bg: #2d3748;
+--code-text: #81e6d9;
+--shadow: 0 2px 12px rgba(0,0,0,0.08);
+--transition: 0.3s ease;
+--green: #48bb78;
+}
+
+[data-theme="dark"] {
+--bg-primary: #1a1f2e;
+--bg-secondary: #242b3d;
+--bg-gradient: linear-gradient(135deg, #4a5f7f 0%, #3d4e6a 100%);
+--text-primary: #e2e8f0;
+--text-secondary: #a0aec0;
+--border-color: #374151;
+--hover-bg: #2d3748;
+--category-bg: #2d3748;
+--category-text: #e2e8f0;
+--code-bg: #1a202c;
+--code-text: #9ae6b4;
+--shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
 body {
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+background: var(--bg-primary);
 padding: 20px;
 min-height: 100vh;
+transition: background var(--transition);
 }
 
 .container {
 max-width: 1400px;
 margin: 0 auto;
-background: white;
-border-radius: 15px;
-box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+background: var(--bg-secondary);
+border-radius: 12px;
+box-shadow: var(--shadow);
 overflow: hidden;
+transition: all var(--transition);
+border: 1px solid var(--border-color);
 }
 
 header {
-background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+background: var(--bg-gradient);
 color: white;
-padding: 30px;
-text-align: center;
+padding: 40px 30px;
+position: relative;
+}
+
+.header-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+gap: 20px;
+}
+
+.header-text {
+flex: 1;
+min-width: 250px;
 }
 
 h1 {
-font-size: 2.5em;
+font-size: 2.8em;
 margin-bottom: 10px;
+font-weight: 700;
 }
 
 .subtitle {
+font-size: 1.15em;
+opacity: 0.95;
+font-weight: 300;
+}
+
+.controls {
+display: flex;
+gap: 15px;
+align-items: center;
+flex-wrap: wrap;
+}
+
+.search-box {
+position: relative;
+}
+
+#searchInput {
+padding: 12px 40px 12px 16px;
+border: none;
+border-radius: 10px;
+background: rgba(255,255,255,0.2);
+color: white;
+font-size: 0.95em;
+width: 280px;
+backdrop-filter: blur(10px);
+transition: all var(--transition);
+}
+
+#searchInput::placeholder {
+color: rgba(255,255,255,0.7);
+}
+
+#searchInput:focus {
+outline: none;
+background: rgba(255,255,255,0.3);
+width: 320px;
+}
+
+.search-icon {
+position: absolute;
+right: 12px;
+top: 50%;
+transform: translateY(-50%);
+color: white;
+opacity: 0.8;
+}
+
+.theme-toggle {
+background: rgba(255,255,255,0.2);
+border: none;
+border-radius: 50px;
+width: 60px;
+height: 32px;
+cursor: pointer;
+position: relative;
+transition: background var(--transition);
+backdrop-filter: blur(10px);
+}
+
+.theme-toggle:hover {
+background: rgba(255,255,255,0.3);
+}
+
+.theme-toggle::before {
+content: '🌙';
+position: absolute;
+left: 4px;
+top: 50%;
+transform: translateY(-50%);
+font-size: 18px;
+transition: all var(--transition);
+}
+
+[data-theme="dark"] .theme-toggle::before {
+content: '☀️';
+left: 32px;
+}
+
+.stats {
+display: flex;
+gap: 30px;
+padding: 20px 30px;
+background: var(--bg-primary);
+border-bottom: 1px solid var(--border-color);
+flex-wrap: wrap;
+}
+
+.stat {
+display: flex;
+align-items: center;
+gap: 8px;
+color: var(--text-secondary);
+font-size: 0.9em;
+}
+
+.stat-value {
+font-weight: 600;
+color: var(--text-primary);
 font-size: 1.1em;
-opacity: 0.9;
 }
 
 .table-container {
@@ -54,95 +198,200 @@ padding: 20px;
 table {
 width: 100%;
 border-collapse: collapse;
-background: white;
+background: var(--bg-secondary);
 }
 
 thead {
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: var(--bg-gradient);
 color: white;
+position: sticky;
+top: 0;
+z-index: 10;
 }
 
 th {
-padding: 15px;
+padding: 18px 15px;
 text-align: left;
-font-size: 1.1em;
+font-size: 1.05em;
 font-weight: 600;
 }
 
 td {
-padding: 12px 15px;
-border-bottom: 1px solid #e2e8f0;
+padding: 16px 15px;
+border-bottom: 1px solid var(--border-color);
+color: var(--text-primary);
+transition: all var(--transition);
+vertical-align: top;
+}
+
+tbody tr {
+transition: all var(--transition);
 }
 
 tbody tr:hover {
-background: #f7fafc;
-transition: background 0.2s;
+background: var(--hover-bg);
+}
+
+tbody tr.hidden {
+display: none;
 }
 
 .category {
-background: #edf2f7;
-font-weight: bold;
-color: #2d3748;
+background: var(--category-bg);
+font-weight: 700;
+color: var(--category-text);
 font-size: 1.1em;
+text-transform: uppercase;
+letter-spacing: 0.5px;
 }
 
 code {
-background: #2d3748;
-color: #a0e9fd;
-padding: 3px 8px;
-border-radius: 4px;
-font-family: 'Courier New', monospace;
-font-size: 0.95em;
+background: var(--code-bg);
+color: var(--code-text);
+padding: 4px 10px;
+border-radius: 6px;
+font-family: 'Fira Code', 'Courier New', monospace;
+font-size: 0.92em;
+display: inline-block;
+line-height: 1.6;
+transition: all var(--transition);
+cursor: pointer;
+}
+
+code:hover {
+transform: scale(1.02);
+box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+code.copied {
+background: var(--green) !important;
 }
 
 .concept {
 font-weight: 600;
-color: #2d3748;
+color: var(--text-primary);
 }
 
-.python-col {
-background: #fef3c7;
+.warning-icon {
+color: #e53e3e;
+font-size: 1.1em;
+cursor: help;
+margin-left: 4px;
 }
 
-.java-col {
-background: #dbeafe;
+.no-results {
+text-align: center;
+padding: 60px 20px;
+color: var(--text-secondary);
+display: none;
+}
+
+.no-results.visible {
+display: block;
+}
+
+.no-results-icon {
+font-size: 4em;
+margin-bottom: 20px;
+opacity: 0.3;
+}
+
+footer {
+text-align: center;
+padding: 30px;
+color: var(--text-secondary);
+font-size: 0.9em;
+border-top: 1px solid var(--border-color);
 }
 
 @media (max-width: 768px) {
 h1 {
-font-size: 1.8em;
+font-size: 2em;
+}
+
+.header-content {
+flex-direction: column;
+align-items: flex-start;
+}
+
+.controls {
+width: 100%;
+}
+
+#searchInput {
+width: 100%;
+}
+
+#searchInput:focus {
+width: 100%;
 }
 
 th, td {
-padding: 10px;
-font-size: 0.9em;
+padding: 12px 10px;
+font-size: 0.85em;
 }
+
+.stats {
+gap: 15px;
+}
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+tbody tr {
+animation: fadeIn 0.3s ease;
 }
 </style>
-```
-
 </head>
 <body>
 <div class="container">
 <header>
+<div class="header-content">
+<div class="header-text">
 <h1>Python ↔️ Java</h1>
-<p class="subtitle">Guide de transition : Commandes et syntaxe équivalentes</p>
+<p class="subtitle">Guide de transition complet : Commandes et syntaxe équivalentes</p>
+</div>
+<div class="controls">
+<div class="search-box">
+<input type="text" id="searchInput" placeholder="Rechercher un concept...">
+<span class="search-icon">🔍</span>
+</div>
+<button class="theme-toggle" id="themeToggle" aria-label="Changer de thème"></button>
+</div>
+</div>
 </header>
 
-```
+<div class="stats">
+<div class="stat">
+<span>Total concepts:</span>
+<span class="stat-value" id="totalCount">0</span>
+</div>
+<div class="stat">
+<span>Affichés:</span>
+<span class="stat-value" id="visibleCount">0</span>
+</div>
+<div class="stat">
+<span>Catégories:</span>
+<span class="stat-value" id="categoryCount">0</span>
+</div>
+</div>
+
 <div class="table-container">
-<table>
+<table id="comparisonTable">
 <thead>
 <tr>
 <th style="width: 25%">Concept</th>
-<th style="width: 37.5%">Python</th>
-<th style="width: 37.5%">Java</th>
+<th style="width: 37.5%">Python 🐍</th>
+<th style="width: 37.5%">Java ☕</th>
 </tr>
 </thead>
 <tbody>
-<!-- Affichage -->
+<!-- AFFICHAGE -->
 <tr class="category">
-<td colspan="3">AFFICHAGE</td>
+<td colspan="3">📺 AFFICHAGE</td>
 </tr>
 <tr>
 <td class="concept">Afficher du texte</td>
@@ -155,9 +404,9 @@ font-size: 0.9em;
 <td><code>System.out.print("Hi");</code></td>
 </tr>
 
-<!-- Variables -->
+<!-- VARIABLES -->
 <tr class="category">
-<td colspan="3">VARIABLES & TYPES</td>
+<td colspan="3">📦 VARIABLES & TYPES</td>
 </tr>
 <tr>
 <td class="concept">Déclaration variable</td>
@@ -166,7 +415,7 @@ font-size: 0.9em;
 </tr>
 <tr>
 <td class="concept">Constante</td>
-<td><code>MAX = 100</code> (convention)</td>
+<td><code>MAX = 100</code></td>
 <td><code>final int MAX = 100;</code></td>
 </tr>
 <tr>
@@ -190,9 +439,9 @@ font-size: 0.9em;
 <td><code>boolean actif = true;</code></td>
 </tr>
 
-<!-- Opérateurs -->
+<!-- OPÉRATEURS -->
 <tr class="category">
-<td colspan="3">OPÉRATEURS</td>
+<td colspan="3">🔢 OPÉRATEURS</td>
 </tr>
 <tr>
 <td class="concept">Addition</td>
@@ -200,9 +449,9 @@ font-size: 0.9em;
 <td><code>a + b</code></td>
 </tr>
 <tr>
-<td class="concept">Division entière</td>
+<td class="concept">Division entière<span class="warning-icon" title="Attention: comportement différent!">⚠️</span></td>
 <td><code>a // b</code></td>
-<td><code>a / b</code> (si int)</td>
+<td><code>a / b</code></td>
 </tr>
 <tr>
 <td class="concept">Modulo</td>
@@ -217,12 +466,12 @@ font-size: 0.9em;
 <tr>
 <td class="concept">Incrément</td>
 <td><code>x += 1</code></td>
-<td><code>x++</code> ou <code>x += 1</code></td>
+<td><code>x++</code></td>
 </tr>
 
-<!-- Conditions -->
+<!-- CONDITIONS -->
 <tr class="category">
-<td colspan="3">CONDITIONS</td>
+<td colspan="3">🔀 CONDITIONS</td>
 </tr>
 <tr>
 <td class="concept">Si</td>
@@ -254,10 +503,15 @@ font-size: 0.9em;
 <td><code>not</code></td>
 <td><code>!</code></td>
 </tr>
+<tr>
+<td class="concept">Opérateur ternaire</td>
+<td><code>x if condition else y</code></td>
+<td><code>condition ? x : y</code></td>
+</tr>
 
-<!-- Boucles -->
+<!-- BOUCLES -->
 <tr class="category">
-<td colspan="3">BOUCLES</td>
+<td colspan="3">🔄 BOUCLES</td>
 </tr>
 <tr>
 <td class="concept">Boucle for (range)</td>
@@ -284,10 +538,20 @@ font-size: 0.9em;
 <td><code>continue</code></td>
 <td><code>continue;</code></td>
 </tr>
+<tr>
+<td class="concept">Enumerate (index + valeur)</td>
+<td><code>for i, val in enumerate(liste):</code></td>
+<td><code>for (int i=0; i<liste.size(); i++) {<br>&nbsp;&nbsp;val = liste.get(i);<br>}</code></td>
+</tr>
+<tr>
+<td class="concept">Range avec step</td>
+<td><code>for i in range(0, 10, 2):</code></td>
+<td><code>for (int i=0; i<10; i+=2) {</code></td>
+</tr>
 
-<!-- Listes/Tableaux -->
+<!-- LISTES -->
 <tr class="category">
-<td colspan="3">LISTES & TABLEAUX</td>
+<td colspan="3">📋 LISTES & TABLEAUX</td>
 </tr>
 <tr>
 <td class="concept">Créer une liste</td>
@@ -302,7 +566,7 @@ font-size: 0.9em;
 <tr>
 <td class="concept">Accéder à un élément</td>
 <td><code>liste[0]</code></td>
-<td><code>liste[0]</code> ou <code>liste.get(0)</code></td>
+<td><code>liste[0] ou liste.get(0)</code></td>
 </tr>
 <tr>
 <td class="concept">Ajouter un élément</td>
@@ -312,12 +576,67 @@ font-size: 0.9em;
 <tr>
 <td class="concept">Longueur</td>
 <td><code>len(liste)</code></td>
-<td><code>liste.length</code> ou <code>liste.size()</code></td>
+<td><code>liste.length ou liste.size()</code></td>
+</tr>
+<tr>
+<td class="concept">Slicing (extraction)</td>
+<td><code>liste[1:4]</code></td>
+<td><code>liste.subList(1, 4)</code></td>
+</tr>
+<tr>
+<td class="concept">Index négatif</td>
+<td><code>liste[-1]</code></td>
+<td><code>liste[liste.length - 1]</code></td>
+</tr>
+<tr>
+<td class="concept">Compréhension de liste</td>
+<td><code>[x*2 for x in range(5)]</code></td>
+<td><code>IntStream.range(0,5).map(x->x*2).toArray()</code></td>
+</tr>
+<tr>
+<td class="concept">Vérifier présence</td>
+<td><code>if x in liste:</code></td>
+<td><code>if (liste.contains(x)) {</code></td>
+</tr>
+<tr>
+<td class="concept">Inverser une liste</td>
+<td><code>liste.reverse()</code></td>
+<td><code>Collections.reverse(liste);</code></td>
+</tr>
+<tr>
+<td class="concept">Trier une liste</td>
+<td><code>liste.sort()</code></td>
+<td><code>Collections.sort(liste);</code></td>
 </tr>
 
-<!-- Fonctions -->
+<!-- TUPLES & SETS -->
 <tr class="category">
-<td colspan="3">FONCTIONS</td>
+<td colspan="3">🎯 TUPLES & SETS</td>
+</tr>
+<tr>
+<td class="concept">Tuple (immuable)</td>
+<td><code>t = (1, 2, 3)</code></td>
+<td><code>// Pas d'équivalent direct</code></td>
+</tr>
+<tr>
+<td class="concept">Unpacking</td>
+<td><code>a, b, c = (1, 2, 3)</code></td>
+<td><code>// Pas d'équivalent direct</code></td>
+</tr>
+<tr>
+<td class="concept">Set (ensemble)</td>
+<td><code>s = {1, 2, 3}</code></td>
+<td><code>Set<Integer> s = new HashSet<>(Arrays.asList(1,2,3));</code></td>
+</tr>
+<tr>
+<td class="concept">Ajouter à un set</td>
+<td><code>s.add(4)</code></td>
+<td><code>s.add(4);</code></td>
+</tr>
+
+<!-- FONCTIONS -->
+<tr class="category">
+<td colspan="3">⚙️ FONCTIONS</td>
 </tr>
 <tr>
 <td class="concept">Définir une fonction</td>
@@ -339,10 +658,35 @@ font-size: 0.9em;
 <td><code>ma_fonction()</code></td>
 <td><code>maFonction();</code></td>
 </tr>
+<tr>
+<td class="concept">Paramètre par défaut</td>
+<td><code>def func(a, b=5):</code></td>
+<td><code>// Surcharge de méthode nécessaire</code></td>
+</tr>
+<tr>
+<td class="concept">Lambda (fonction anonyme)</td>
+<td><code>lambda x: x * 2</code></td>
+<td><code>x -> x * 2</code></td>
+</tr>
+<tr>
+<td class="concept">Map sur liste</td>
+<td><code>list(map(lambda x: x*2, liste))</code></td>
+<td><code>liste.stream().map(x -> x*2).collect(Collectors.toList())</code></td>
+</tr>
+<tr>
+<td class="concept">Filter sur liste</td>
+<td><code>list(filter(lambda x: x>0, liste))</code></td>
+<td><code>liste.stream().filter(x -> x>0).collect(Collectors.toList())</code></td>
+</tr>
+<tr>
+<td class="concept">Zip (combiner listes)</td>
+<td><code>list(zip(a, b))</code></td>
+<td><code>// Pas d'équivalent direct simple</code></td>
+</tr>
 
-<!-- Entrée utilisateur -->
+<!-- ENTRÉE UTILISATEUR -->
 <tr class="category">
-<td colspan="3">ENTRÉE UTILISATEUR</td>
+<td colspan="3">⌨️ ENTRÉE UTILISATEUR</td>
 </tr>
 <tr>
 <td class="concept">Lire texte</td>
@@ -355,9 +699,9 @@ font-size: 0.9em;
 <td><code>sc.nextInt();</code></td>
 </tr>
 
-<!-- Chaînes -->
+<!-- CHAÎNES -->
 <tr class="category">
-<td colspan="3">MANIPULATION DE TEXTE</td>
+<td colspan="3">📝 MANIPULATION DE TEXTE</td>
 </tr>
 <tr>
 <td class="concept">Concaténation</td>
@@ -379,10 +723,35 @@ font-size: 0.9em;
 <td><code>texte.lower()</code></td>
 <td><code>texte.toLowerCase()</code></td>
 </tr>
+<tr>
+<td class="concept">Split (découper)</td>
+<td><code>texte.split(",")</code></td>
+<td><code>texte.split(",")</code></td>
+</tr>
+<tr>
+<td class="concept">Join (joindre)</td>
+<td><code>",".join(liste)</code></td>
+<td><code>String.join(",", liste)</code></td>
+</tr>
+<tr>
+<td class="concept">Strip (enlever espaces)</td>
+<td><code>texte.strip()</code></td>
+<td><code>texte.trim()</code></td>
+</tr>
+<tr>
+<td class="concept">Replace</td>
+<td><code>texte.replace("a", "b")</code></td>
+<td><code>texte.replace("a", "b")</code></td>
+</tr>
+<tr>
+<td class="concept">Substring</td>
+<td><code>texte[0:5]</code></td>
+<td><code>texte.substring(0, 5)</code></td>
+</tr>
 
-<!-- Commentaires -->
+<!-- COMMENTAIRES -->
 <tr class="category">
-<td colspan="3">COMMENTAIRES</td>
+<td colspan="3">💬 COMMENTAIRES</td>
 </tr>
 <tr>
 <td class="concept">Commentaire ligne</td>
@@ -391,13 +760,13 @@ font-size: 0.9em;
 </tr>
 <tr>
 <td class="concept">Commentaire bloc</td>
-<td><code>"""<br>Bloc<br>"""</code></td>
-<td><code>/*<br>Bloc<br>*/</code></td>
+<td><code>"""Bloc"""</code></td>
+<td><code>/* Bloc */</code></td>
 </tr>
 
-<!-- Classes -->
+<!-- CLASSES -->
 <tr class="category">
-<td colspan="3">PROGRAMMATION ORIENTÉE OBJET</td>
+<td colspan="3">🏗️ PROGRAMMATION ORIENTÉE OBJET</td>
 </tr>
 <tr>
 <td class="concept">Définir une classe</td>
@@ -424,10 +793,25 @@ font-size: 0.9em;
 <td><code>def saluer(self):</code></td>
 <td><code>public void saluer() {</code></td>
 </tr>
+<tr>
+<td class="concept">Héritage</td>
+<td><code>class Dog(Animal):</code></td>
+<td><code>public class Dog extends Animal {</code></td>
+</tr>
+<tr>
+<td class="concept">Interface</td>
+<td><code># Classe abstraite ou Protocol</code></td>
+<td><code>public interface Comparable {</code></td>
+</tr>
+<tr>
+<td class="concept">Méthode abstraite</td>
+<td><code>from abc import ABC, abstractmethod</code></td>
+<td><code>abstract void method();</code></td>
+</tr>
 
-<!-- Gestion d'erreurs -->
+<!-- GESTION D'ERREURS -->
 <tr class="category">
-<td colspan="3">GESTION D'ERREURS</td>
+<td colspan="3">⚠️ GESTION D'ERREURS</td>
 </tr>
 <tr>
 <td class="concept">Bloc try</td>
@@ -437,12 +821,7 @@ font-size: 0.9em;
 <tr>
 <td class="concept">Capturer exception</td>
 <td><code>except ValueError:</code></td>
-<td><code>} catch (Exception e) {</code></td>
-</tr>
-<tr>
-<td class="concept">Capturer toute exception</td>
-<td><code>except Exception:</code></td>
-<td><code>} catch (Exception e) {</code></td>
+<td><code>} catch (ValueError e) {</code></td>
 </tr>
 <tr>
 <td class="concept">Bloc finally</td>
@@ -454,15 +833,20 @@ font-size: 0.9em;
 <td><code>raise ValueError("Erreur")</code></td>
 <td><code>throw new Exception("Erreur");</code></td>
 </tr>
+<tr>
+<td class="concept">Context manager (with)</td>
+<td><code>with open("f.txt") as f:</code></td>
+<td><code>try (FileReader f = new FileReader("f.txt")) {</code></td>
+</tr>
 
-<!-- Dictionnaires/Maps -->
+<!-- DICTIONNAIRES -->
 <tr class="category">
-<td colspan="3">DICTIONNAIRES & MAPS</td>
+<td colspan="3">🗂️ DICTIONNAIRES & MAPS</td>
 </tr>
 <tr>
 <td class="concept">Créer un dictionnaire</td>
-<td><code>d = {"nom": "Alice", "age": 25}</code></td>
-<td><code>HashMap<String, Object> d = new HashMap<>();</code></td>
+<td><code>d = {"nom": "Alice"}</code></td>
+<td><code>HashMap<String, String> d = new HashMap<>();</code></td>
 </tr>
 <tr>
 <td class="concept">Ajouter/Modifier valeur</td>
@@ -480,44 +864,49 @@ font-size: 0.9em;
 <td><code>d.containsKey("nom")</code></td>
 </tr>
 <tr>
-<td class="concept">Supprimer clé</td>
-<td><code>del d["nom"]</code></td>
-<td><code>d.remove("nom");</code></td>
-</tr>
-<tr>
-<td class="concept">Parcourir dict/map</td>
-<td><code>for key, val in d.items():</code></td>
+<td class="concept">Parcourir dictionnaire</td>
+<td><code>for k, v in d.items():</code></td>
 <td><code>for (Map.Entry<K,V> e : d.entrySet()) {</code></td>
 </tr>
+<tr>
+<td class="concept">Clés du dictionnaire</td>
+<td><code>d.keys()</code></td>
+<td><code>d.keySet()</code></td>
+</tr>
+<tr>
+<td class="concept">Valeurs du dictionnaire</td>
+<td><code>d.values()</code></td>
+<td><code>d.values()</code></td>
+</tr>
 
-<!-- Fichiers -->
+<!-- FICHIERS -->
 <tr class="category">
-<td colspan="3">FICHIERS</td>
+<td colspan="3">📁 FICHIERS</td>
 </tr>
 <tr>
 <td class="concept">Ouvrir fichier lecture</td>
 <td><code>with open("file.txt", "r") as f:</code></td>
-<td><code>FileReader fr = new FileReader("file.txt");<br>BufferedReader br = new BufferedReader(fr);</code></td>
-</tr>
-<tr>
-<td class="concept">Lire tout le fichier</td>
-<td><code>contenu = f.read()</code></td>
-<td><code>Files.readString(Path.of("file.txt"));</code></td>
+<td><code>BufferedReader br = new BufferedReader(new FileReader("file.txt"));</code></td>
 </tr>
 <tr>
 <td class="concept">Lire ligne par ligne</td>
 <td><code>for ligne in f:</code></td>
-<td><code>String ligne; while((ligne = br.readLine()) != null) {</code></td>
+<td><code>while((ligne = br.readLine()) != null) {</code></td>
 </tr>
 <tr>
 <td class="concept">Écrire dans fichier</td>
 <td><code>with open("file.txt", "w") as f:<br>&nbsp;&nbsp;f.write("texte")</code></td>
-<td><code>FileWriter fw = new FileWriter("file.txt");<br>fw.write("texte");<br>fw.close();</code></td>
+<td><code>FileWriter fw = new FileWriter("file.txt");<br>fw.write("texte");</code></td>
+</tr>
+<tr>
+<td class="concept">Lire tout le fichier</td>
+<td><code>f.read()</code></td>
+<td><code>Files.readString(Path.of("file.txt"))</code></td>
 </tr>
 
-<!-- Imports -->
+<!-- IMPORTS -->
 <tr class="category">
-<td colspan="3">IMPORTS & MODULES</td>
+<td colspan="3">📚 IMPORTS & MODULES</td>
 </tr>
 <tr>
 <td class="concept">Importer module</td>
@@ -527,17 +916,17 @@ font-size: 0.9em;
 <tr>
 <td class="concept">Import spécifique</td>
 <td><code>from math import sqrt</code></td>
-<td><code>import java.lang.Math.sqrt;</code></td>
+<td><code>import static java.lang.Math.sqrt;</code></td>
 </tr>
 <tr>
-<td class="concept">Alias d'import</td>
+<td class="concept">Import avec alias</td>
 <td><code>import numpy as np</code></td>
-<td><code>-</code> (pas d'alias en Java)</td>
+<td><code>// Pas d'équivalent direct</code></td>
 </tr>
 
-<!-- Null/None -->
+<!-- NULL -->
 <tr class="category">
-<td colspan="3">VALEURS NULLES</td>
+<td colspan="3">∅ VALEURS NULLES</td>
 </tr>
 <tr>
 <td class="concept">Valeur nulle</td>
@@ -550,14 +939,14 @@ font-size: 0.9em;
 <td><code>if (x == null) {</code></td>
 </tr>
 <tr>
-<td class="concept">Vérifier si non null</td>
-<td><code>if x is not None:</code></td>
-<td><code>if (x != null) {</code></td>
+<td class="concept">Valeur par défaut si null</td>
+<td><code>x or "default"</code></td>
+<td><code>x != null ? x : "default"</code></td>
 </tr>
 
-<!-- String formatting -->
+<!-- FORMATAGE -->
 <tr class="category">
-<td colspan="3">FORMATAGE DE TEXTE</td>
+<td colspan="3">✨ FORMATAGE DE TEXTE</td>
 </tr>
 <tr>
 <td class="concept">F-string / Interpolation</td>
@@ -570,29 +959,24 @@ font-size: 0.9em;
 <td><code>age + " ans"</code></td>
 </tr>
 <tr>
-<td class="concept">Méthode format</td>
-<td><code>"Hello {}".format(nom)</code></td>
-<td><code>String.format("Hello %s", nom)</code></td>
+<td class="concept">Format nombre décimal</td>
+<td><code>f"{pi:.2f}"</code></td>
+<td><code>String.format("%.2f", pi)</code></td>
 </tr>
 
-<!-- Méthodes utiles -->
+<!-- MÉTHODES UTILES -->
 <tr class="category">
-<td colspan="3">MÉTHODES UTILES</td>
+<td colspan="3">🛠️ MÉTHODES UTILES</td>
 </tr>
 <tr>
 <td class="concept">Conversion en string</td>
 <td><code>str(42)</code></td>
-<td><code>String.valueOf(42)</code> ou <code>Integer.toString(42)</code></td>
+<td><code>String.valueOf(42)</code></td>
 </tr>
 <tr>
 <td class="concept">Conversion en int</td>
 <td><code>int("42")</code></td>
 <td><code>Integer.parseInt("42")</code></td>
-</tr>
-<tr>
-<td class="concept">Conversion en float</td>
-<td><code>float("3.14")</code></td>
-<td><code>Double.parseDouble("3.14")</code></td>
 </tr>
 <tr>
 <td class="concept">Arrondir</td>
@@ -606,13 +990,28 @@ font-size: 0.9em;
 </tr>
 <tr>
 <td class="concept">Min/Max</td>
-<td><code>min(a, b)</code> / <code>max(a, b)</code></td>
-<td><code>Math.min(a, b)</code> / <code>Math.max(a, b)</code></td>
+<td><code>min(a, b)</code></td>
+<td><code>Math.min(a, b)</code></td>
+</tr>
+<tr>
+<td class="concept">Racine carrée</td>
+<td><code>math.sqrt(16)</code></td>
+<td><code>Math.sqrt(16)</code></td>
+</tr>
+<tr>
+<td class="concept">Nombre aléatoire</td>
+<td><code>import random; random.random()</code></td>
+<td><code>Math.random()</code></td>
+</tr>
+<tr>
+<td class="concept">Type d'une variable</td>
+<td><code>type(x)</code></td>
+<td><code>x.getClass()</code></td>
 </tr>
 
-<!-- Programme principal -->
+<!-- STRUCTURE PROGRAMME -->
 <tr class="category">
-<td colspan="3">STRUCTURE PROGRAMME</td>
+<td colspan="3">🚀 STRUCTURE PROGRAMME</td>
 </tr>
 <tr>
 <td class="concept">Point d'entrée</td>
@@ -621,14 +1020,151 @@ font-size: 0.9em;
 </tr>
 <tr>
 <td class="concept">Arguments ligne commande</td>
-<td><code>import sys<br>sys.argv</code></td>
+<td><code>import sys; sys.argv</code></td>
 <td><code>args[0], args[1]...</code></td>
+</tr>
+
+<!-- AUTRES -->
+<tr class="category">
+<td colspan="3">🎁 DIVERS</td>
+</tr>
+<tr>
+<td class="concept">Décorateur</td>
+<td><code>@decorator</code></td>
+<td><code>@Annotation</code></td>
+</tr>
+<tr>
+<td class="concept">Generics (types paramétrés)</td>
+<td><code># Duck typing</code></td>
+<td><code>List<String> liste = new ArrayList<>();</code></td>
+</tr>
+<tr>
+<td class="concept">Assert (test)</td>
+<td><code>assert x > 0</code></td>
+<td><code>assert x > 0;</code></td>
+</tr>
+<tr>
+<td class="concept">Pause/Sleep</td>
+<td><code>import time; time.sleep(1)</code></td>
+<td><code>Thread.sleep(1000);</code></td>
+</tr>
+<tr>
+<td class="concept">Afficher type</td>
+<td><code>print(type(x))</code></td>
+<td><code>System.out.println(x.getClass());</code></td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-```
 
+<div class="no-results" id="noResults">
+<div class="no-results-icon">🔍</div>
+<h3>Aucun résultat trouvé</h3>
+<p>Essayez avec d'autres mots-clés</p>
+</div>
+</div>
+
+<footer>
+<p>💡 Astuce : Cliquez sur le code pour le copier | Créé par un 👽 pour des 👽</p>
+</footer>
+</div>
+
+<script>
+const themeToggle = document.getElementById('themeToggle');
+const searchInput = document.getElementById('searchInput');
+const table = document.getElementById('comparisonTable');
+const tbody = table.querySelector('tbody');
+const noResults = document.getElementById('noResults');
+const totalCount = document.getElementById('totalCount');
+const visibleCount = document.getElementById('visibleCount');
+const categoryCount = document.getElementById('categoryCount');
+
+// Theme management
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+
+themeToggle.addEventListener('click', () => {
+const currentTheme = document.documentElement.getAttribute('data-theme');
+const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+document.documentElement.setAttribute('data-theme', newTheme);
+});
+
+// Search functionality
+const allRows = Array.from(tbody.querySelectorAll('tr:not(.category)'));
+const categories = Array.from(tbody.querySelectorAll('tr.category'));
+
+function updateStats() {
+const visible = allRows.filter(row => !row.classList.contains('hidden')).length;
+totalCount.textContent = allRows.length;
+visibleCount.textContent = visible;
+categoryCount.textContent = categories.length;
+}
+
+function applyFilters() {
+const searchTerm = searchInput.value.toLowerCase().trim();
+let hasResults = false;
+
+allRows.forEach(row => {
+const text = row.textContent.toLowerCase();
+const matchesSearch = searchTerm === '' || text.includes(searchTerm);
+
+if (matchesSearch) {
+row.classList.remove('hidden');
+hasResults = true;
+} else {
+row.classList.add('hidden');
+}
+});
+
+categories.forEach(cat => {
+let nextRow = cat.nextElementSibling;
+let hasVisibleRows = false;
+while (nextRow && !nextRow.classList.contains('category')) {
+if (!nextRow.classList.contains('hidden')) {
+hasVisibleRows = true;
+break;
+}
+nextRow = nextRow.nextElementSibling;
+}
+cat.style.display = hasVisibleRows ? '' : 'none';
+});
+
+noResults.classList.toggle('visible', !hasResults);
+updateStats();
+}
+
+searchInput.addEventListener('input', applyFilters);
+
+// Initialize stats
+updateStats();
+
+// Copy code on click
+document.querySelectorAll('code').forEach(code => {
+code.title = 'Cliquer pour copier';
+code.addEventListener('click', async () => {
+try {
+await navigator.clipboard.writeText(code.textContent);
+code.classList.add('copied');
+setTimeout(() => {
+code.classList.remove('copied');
+}, 300);
+} catch (err) {
+console.log('Copie non disponible');
+}
+});
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+if (e.key === '/' && document.activeElement !== searchInput) {
+e.preventDefault();
+searchInput.focus();
+}
+if (e.key === 'Escape') {
+searchInput.value = '';
+searchInput.blur();
+applyFilters();
+}
+});
+</script>
 </body>
 </html>

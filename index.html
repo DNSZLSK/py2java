@@ -1,1170 +1,1642 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Python vs Java - Guide de Transition</title>
-<style>
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Py2Java - Guide de Transition</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: rgba(30, 30, 32, 0.85);
+            --bg-card: rgba(25, 25, 27, 0.92);
+            --text-primary: #d4d4d8;
+            --text-secondary: #a0a0a5;
+            --accent: #0a84ff;
+            --accent-hover: #409cff;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --code-bg: rgba(255, 255, 255, 0.04);
+            --python-color: #6ba3d4;
+            --java-color: #e89a3c;
+        }
 
-:root {
---bg-primary: #f8f9fa;
---bg-secondary: #ffffff;
---bg-gradient: linear-gradient(135deg, #5b8fd8 0%, #4a7cc2 100%);
---text-primary: #2c3e50;
---text-secondary: #7f8c8d;
---border-color: #e1e4e8;
---hover-bg: #f6f8fa;
---category-bg: #f6f8fa;
---category-text: #2c3e50;
---code-bg: #2d3748;
---code-text: #81e6d9;
---shadow: 0 2px 12px rgba(0,0,0,0.08);
---transition: 0.3s ease;
---green: #48bb78;
-}
+        [data-theme="light"] {
+            --bg-primary: #fafafa;
+            --bg-secondary: rgba(250, 250, 252, 0.85);
+            --bg-card: rgba(255, 255, 255, 0.92);
+            --text-primary: #3a3a3c;
+            --text-secondary: #7a7a7e;
+            --border: rgba(0, 0, 0, 0.06);
+            --border-hover: rgba(0, 0, 0, 0.12);
+            --code-bg: rgba(0, 0, 0, 0.03);
+        }
 
-[data-theme="dark"] {
---bg-primary: #1a1f2e;
---bg-secondary: #242b3d;
---bg-gradient: linear-gradient(135deg, #4a5f7f 0%, #3d4e6a 100%);
---text-primary: #e2e8f0;
---text-secondary: #a0aec0;
---border-color: #374151;
---hover-bg: #2d3748;
---category-bg: #2d3748;
---category-text: #e2e8f0;
---code-bg: #1a202c;
---code-text: #9ae6b4;
---shadow: 0 2px 12px rgba(0,0,0,0.4);
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body {
-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-background: var(--bg-primary);
-padding: 20px;
-min-height: 100vh;
-transition: background var(--transition);
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
 
-.container {
-max-width: 1400px;
-margin: 0 auto;
-background: var(--bg-secondary);
-border-radius: 12px;
-box-shadow: var(--shadow);
-overflow: hidden;
-transition: all var(--transition);
-border: 1px solid var(--border-color);
-}
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--bg-secondary);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+        }
 
-header {
-background: var(--bg-gradient);
-color: white;
-padding: 40px 30px;
-position: relative;
-}
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
 
-.header-content {
-display: flex;
-justify-content: space-between;
-align-items: center;
-flex-wrap: wrap;
-gap: 20px;
-}
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
 
-.header-text {
-flex: 1;
-min-width: 250px;
-}
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--python-color), var(--java-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-h1 {
-font-size: 2.8em;
-margin-bottom: 10px;
-font-weight: 700;
-}
+        .header-title span {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
 
-.subtitle {
-font-size: 1.15em;
-opacity: 0.95;
-font-weight: 300;
-}
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
 
-.controls {
-display: flex;
-gap: 15px;
-align-items: center;
-flex-wrap: wrap;
-}
+        /* Search */
+        .search-container {
+            position: relative;
+        }
 
-.search-box {
-position: relative;
-}
+        .search-input {
+            width: 280px;
+            padding: 12px 44px 12px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
 
-#searchInput {
-padding: 12px 40px 12px 16px;
-border: none;
-border-radius: 10px;
-background: rgba(255,255,255,0.2);
-color: white;
-font-size: 0.95em;
-width: 280px;
-backdrop-filter: blur(10px);
-transition: all var(--transition);
-}
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
 
-#searchInput::placeholder {
-color: rgba(255,255,255,0.7);
-}
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+        }
 
-#searchInput:focus {
-outline: none;
-background: rgba(255,255,255,0.3);
-width: 320px;
-}
+        .search-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
 
-.search-icon {
-position: absolute;
-right: 12px;
-top: 50%;
-transform: translateY(-50%);
-color: white;
-opacity: 0.8;
-}
+        .search-icon svg {
+            width: 18px;
+            height: 18px;
+        }
 
-.theme-toggle {
-background: rgba(255,255,255,0.2);
-border: none;
-border-radius: 50px;
-width: 60px;
-height: 32px;
-cursor: pointer;
-position: relative;
-transition: background var(--transition);
-backdrop-filter: blur(10px);
-}
+        /* Icon Button */
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
 
-.theme-toggle:hover {
-background: rgba(255,255,255,0.3);
-}
+        .icon-btn:hover {
+            border-color: var(--border-hover);
+            transform: scale(1.05);
+        }
 
-.theme-toggle::before {
-content: '🌙';
-position: absolute;
-left: 4px;
-top: 50%;
-transform: translateY(-50%);
-font-size: 18px;
-transition: all var(--transition);
-}
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
 
-[data-theme="dark"] .theme-toggle::before {
-content: '☀️';
-left: 32px;
-}
+        /* Theme Toggle */
+        .theme-toggle .sun { display: none; }
+        .theme-toggle .moon { display: block; }
+        
+        [data-theme="light"] .theme-toggle .sun { display: block; }
+        [data-theme="light"] .theme-toggle .moon { display: none; }
 
-.stats {
-display: flex;
-gap: 30px;
-padding: 20px 30px;
-background: var(--bg-primary);
-border-bottom: 1px solid var(--border-color);
-flex-wrap: wrap;
-}
+        /* Stats */
+        .stats {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 40px;
+            display: flex;
+            gap: 32px;
+            border-bottom: 1px solid var(--border);
+        }
 
-.stat {
-display: flex;
-align-items: center;
-gap: 8px;
-color: var(--text-secondary);
-font-size: 0.9em;
-}
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
 
-.stat-value {
-font-weight: 600;
-color: var(--text-primary);
-font-size: 1.1em;
-}
+        .stat-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
 
-.table-container {
-overflow-x: auto;
-padding: 20px;
-}
+        /* Table Container */
+        .table-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px 40px 60px;
+        }
 
-table {
-width: 100%;
-border-collapse: collapse;
-background: var(--bg-secondary);
-}
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-thead {
-background: var(--bg-gradient);
-color: white;
-position: sticky;
-top: 0;
-z-index: 10;
-}
+        thead {
+            position: sticky;
+            top: 85px;
+            z-index: 10;
+        }
 
-th {
-padding: 18px 15px;
-text-align: left;
-font-size: 1.05em;
-font-weight: 600;
-}
+        th {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
 
-td {
-padding: 16px 15px;
-border-bottom: 1px solid var(--border-color);
-color: var(--text-primary);
-transition: all var(--transition);
-vertical-align: top;
-}
+        th:first-child {
+            border-radius: 12px 0 0 0;
+        }
 
-tbody tr {
-transition: all var(--transition);
-}
+        th:last-child {
+            border-radius: 0 12px 0 0;
+        }
 
-tbody tr:hover {
-background: var(--hover-bg);
-}
+        .th-python {
+            color: var(--python-color);
+        }
 
-tbody tr.hidden {
-display: none;
-}
+        .th-java {
+            color: var(--java-color);
+        }
 
-.category {
-background: var(--category-bg);
-font-weight: 700;
-color: var(--category-text);
-font-size: 1.1em;
-text-transform: uppercase;
-letter-spacing: 0.5px;
-}
+        /* Doc Link */
+        .doc-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 8px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
 
-code {
-background: var(--code-bg);
-color: var(--code-text);
-padding: 4px 10px;
-border-radius: 6px;
-font-family: 'Fira Code', 'Courier New', monospace;
-font-size: 0.92em;
-display: inline-block;
-line-height: 1.6;
-transition: all var(--transition);
-cursor: pointer;
-}
+        .doc-link:hover {
+            opacity: 1;
+        }
 
-code:hover {
-transform: scale(1.02);
-box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
+        .doc-link svg {
+            width: 14px;
+            height: 14px;
+        }
 
-code.copied {
-background: var(--green) !important;
-}
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 15px;
+            vertical-align: top;
+            position: relative;
+        }
 
-.concept {
-font-weight: 600;
-color: var(--text-primary);
-}
+        tbody tr {
+            transition: all 0.2s ease;
+            position: relative;
+        }
 
-.warning-icon {
-color: #e53e3e;
-font-size: 1.1em;
-cursor: help;
-margin-left: 4px;
-}
+        tbody tr:hover {
+            background: var(--bg-secondary);
+            z-index: 100;
+        }
 
-.no-results {
-text-align: center;
-padding: 60px 20px;
-color: var(--text-secondary);
-display: none;
-}
+        tbody tr.hidden {
+            display: none;
+        }
 
-.no-results.visible {
-display: block;
-}
+        /* Category Row */
+        .category {
+            background: var(--bg-secondary);
+        }
 
-.no-results-icon {
-font-size: 4em;
-margin-bottom: 20px;
-opacity: 0.3;
-}
+        .category td {
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
 
-footer {
-text-align: center;
-padding: 30px;
-color: var(--text-secondary);
-font-size: 0.9em;
-border-top: 1px solid var(--border-color);
-}
+        /* Concept */
+        .concept {
+            font-weight: 500;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
 
-@media (max-width: 768px) {
-h1 {
-font-size: 2em;
-}
+        /* Code */
+        code {
+            display: inline-block;
+            background: var(--code-bg);
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            position: relative;
+        }
 
-.header-content {
-flex-direction: column;
-align-items: flex-start;
-}
+        code:hover {
+            transform: translateY(-1px);
+        }
 
-.controls {
-width: 100%;
-}
+        td:nth-child(2) code:hover {
+            border-color: var(--python-color);
+        }
 
-#searchInput {
-width: 100%;
-}
+        td:nth-child(3) code:hover {
+            border-color: var(--java-color);
+        }
 
-#searchInput:focus {
-width: 100%;
-}
+        code.copied {
+            background: rgba(52, 199, 89, 0.2);
+            border-color: #34c759;
+        }
 
-th, td {
-padding: 12px 10px;
-font-size: 0.85em;
-}
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(18, 18, 20, 0.96);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 9999;
+            min-width: 320px;
+            max-width: 450px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
 
-.stats {
-gap: 15px;
-}
-}
+        [data-theme="light"] .tooltip {
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
 
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(10px); }
-to { opacity: 1; transform: translateY(0); }
-}
+        code:hover .tooltip {
+            opacity: 1;
+        }
 
-tbody tr {
-animation: fadeIn 0.3s ease;
-}
-</style>
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-bottom-color: var(--border);
+        }
+
+        /* Tooltip colors based on column */
+        td:nth-child(2) .tooltip {
+            border-left: 3px solid var(--python-color);
+        }
+
+        td:nth-child(3) .tooltip {
+            border-left: 3px solid var(--java-color);
+        }
+
+        /* Warning */
+        .warning {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: rgba(255, 149, 0, 0.15);
+            color: #ff9500;
+            border-radius: 50%;
+            font-size: 11px;
+            margin-left: 6px;
+            cursor: help;
+        }
+
+        /* No Results */
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-secondary);
+        }
+
+        .no-results.visible {
+            display: block;
+        }
+
+        .no-results h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        .footer {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px 40px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer kbd {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .header-title h1 {
+                font-size: 24px;
+            }
+
+            .header-title span {
+                font-size: 13px;
+            }
+
+            .header-controls {
+                width: 100%;
+                gap: 12px;
+            }
+
+            .search-input {
+                flex: 1;
+                font-size: 16px;
+                padding: 14px 44px 14px 16px;
+            }
+
+            .icon-btn {
+                width: 48px;
+                height: 48px;
+                flex-shrink: 0;
+            }
+
+            .stats {
+                padding: 12px 20px;
+                gap: 16px;
+                flex-wrap: wrap;
+                font-size: 12px;
+            }
+
+            .table-container {
+                padding: 16px 0 40px;
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 600px;
+            }
+
+            th, td {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            th {
+                font-size: 11px;
+            }
+
+            .concept {
+                font-size: 14px;
+            }
+
+            thead {
+                top: 120px;
+            }
+
+            code {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+
+            .tooltip {
+                min-width: 260px;
+                max-width: calc(100vw - 40px);
+                font-size: 12px;
+                padding: 12px 14px;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+            }
+
+            .tooltip::after {
+                left: 50%;
+            }
+
+            .doc-link {
+                font-size: 10px;
+            }
+
+            .doc-link svg {
+                width: 12px;
+                height: 12px;
+            }
+
+            .footer {
+                padding: 20px;
+                font-size: 12px;
+            }
+        }
+
+        @media print {
+            .header-controls,
+            .stats,
+            .footer {
+                display: none;
+            }
+
+            .header {
+                position: static;
+            }
+
+            thead {
+                position: static;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+
+            tr {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-<header>
-<div class="header-content">
-<div class="header-text">
-<h1>Python ↔️ Java</h1>
-<p class="subtitle">Guide de transition complet : Commandes et syntaxe équivalentes</p>
-</div>
-<div class="controls">
-<div class="search-box">
-<input type="text" id="searchInput" placeholder="Rechercher un concept...">
-<span class="search-icon">🔍</span>
-</div>
-<button class="theme-toggle" id="themeToggle" aria-label="Changer de thème"></button>
-</div>
-</div>
-</header>
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <h1>Py2Java</h1>
+                <span>Guide de transition Python / Java</span>
+            </div>
+            <div class="header-controls">
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un concept...">
+                    <div class="search-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                    </div>
+                </div>
+                <button class="icon-btn theme-toggle" id="themeToggle">
+                    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
 
-<div class="stats">
-<div class="stat">
-<span>Total concepts:</span>
-<span class="stat-value" id="totalCount">0</span>
-</div>
-<div class="stat">
-<span>Affichés:</span>
-<span class="stat-value" id="visibleCount">0</span>
-</div>
-<div class="stat">
-<span>Catégories:</span>
-<span class="stat-value" id="categoryCount">0</span>
-</div>
-</div>
+    <div class="stats">
+        <div class="stat">
+            <span>Total :</span>
+            <span class="stat-value" id="totalCount">0</span>
+        </div>
+        <div class="stat">
+            <span>Affichés :</span>
+            <span class="stat-value" id="visibleCount">0</span>
+        </div>
+        <div class="stat">
+            <span>Catégories :</span>
+            <span class="stat-value" id="categoryCount">0</span>
+        </div>
+    </div>
 
-<div class="table-container">
-<table id="comparisonTable">
-<thead>
-<tr>
-<th style="width: 25%">Concept</th>
-<th style="width: 37.5%">Python 🐍</th>
-<th style="width: 37.5%">Java ☕</th>
-</tr>
-</thead>
-<tbody>
-<!-- AFFICHAGE -->
-<tr class="category">
-<td colspan="3">📺 AFFICHAGE</td>
-</tr>
-<tr>
-<td class="concept">Afficher du texte</td>
-<td><code>print("Hello")</code></td>
-<td><code>System.out.println("Hello");</code></td>
-</tr>
-<tr>
-<td class="concept">Afficher sans retour ligne</td>
-<td><code>print("Hi", end="")</code></td>
-<td><code>System.out.print("Hi");</code></td>
-</tr>
-
-<!-- VARIABLES -->
-<tr class="category">
-<td colspan="3">📦 VARIABLES & TYPES</td>
-</tr>
-<tr>
-<td class="concept">Déclaration variable</td>
-<td><code>x = 5</code></td>
-<td><code>int x = 5;</code></td>
-</tr>
-<tr>
-<td class="concept">Constante</td>
-<td><code>MAX = 100</code></td>
-<td><code>final int MAX = 100;</code></td>
-</tr>
-<tr>
-<td class="concept">Entier</td>
-<td><code>age = 25</code></td>
-<td><code>int age = 25;</code></td>
-</tr>
-<tr>
-<td class="concept">Décimal</td>
-<td><code>pi = 3.14</code></td>
-<td><code>double pi = 3.14;</code></td>
-</tr>
-<tr>
-<td class="concept">Texte</td>
-<td><code>nom = "Alice"</code></td>
-<td><code>String nom = "Alice";</code></td>
-</tr>
-<tr>
-<td class="concept">Booléen</td>
-<td><code>actif = True</code></td>
-<td><code>boolean actif = true;</code></td>
-</tr>
-
-<!-- OPÉRATEURS -->
-<tr class="category">
-<td colspan="3">🔢 OPÉRATEURS</td>
-</tr>
-<tr>
-<td class="concept">Addition</td>
-<td><code>a + b</code></td>
-<td><code>a + b</code></td>
-</tr>
-<tr>
-<td class="concept">Division entière<span class="warning-icon" title="Attention: comportement différent!">⚠️</span></td>
-<td><code>a // b</code></td>
-<td><code>a / b</code></td>
-</tr>
-<tr>
-<td class="concept">Modulo</td>
-<td><code>a % b</code></td>
-<td><code>a % b</code></td>
-</tr>
-<tr>
-<td class="concept">Puissance</td>
-<td><code>a ** b</code></td>
-<td><code>Math.pow(a, b)</code></td>
-</tr>
-<tr>
-<td class="concept">Incrément</td>
-<td><code>x += 1</code></td>
-<td><code>x++</code></td>
-</tr>
-
-<!-- CONDITIONS -->
-<tr class="category">
-<td colspan="3">🔀 CONDITIONS</td>
-</tr>
-<tr>
-<td class="concept">Si</td>
-<td><code>if x > 0:</code></td>
-<td><code>if (x > 0) {</code></td>
-</tr>
-<tr>
-<td class="concept">Sinon si</td>
-<td><code>elif x < 0:</code></td>
-<td><code>} else if (x < 0) {</code></td>
-</tr>
-<tr>
-<td class="concept">Sinon</td>
-<td><code>else:</code></td>
-<td><code>} else {</code></td>
-</tr>
-<tr>
-<td class="concept">ET logique</td>
-<td><code>and</code></td>
-<td><code>&&</code></td>
-</tr>
-<tr>
-<td class="concept">OU logique</td>
-<td><code>or</code></td>
-<td><code>||</code></td>
-</tr>
-<tr>
-<td class="concept">NON logique</td>
-<td><code>not</code></td>
-<td><code>!</code></td>
-</tr>
-<tr>
-<td class="concept">Opérateur ternaire</td>
-<td><code>x if condition else y</code></td>
-<td><code>condition ? x : y</code></td>
-</tr>
-
-<!-- BOUCLES -->
-<tr class="category">
-<td colspan="3">🔄 BOUCLES</td>
-</tr>
-<tr>
-<td class="concept">Boucle for (range)</td>
-<td><code>for i in range(5):</code></td>
-<td><code>for (int i=0; i<5; i++) {</code></td>
-</tr>
-<tr>
-<td class="concept">Boucle for (liste)</td>
-<td><code>for item in liste:</code></td>
-<td><code>for (Type item : liste) {</code></td>
-</tr>
-<tr>
-<td class="concept">Boucle while</td>
-<td><code>while x > 0:</code></td>
-<td><code>while (x > 0) {</code></td>
-</tr>
-<tr>
-<td class="concept">Sortir de boucle</td>
-<td><code>break</code></td>
-<td><code>break;</code></td>
-</tr>
-<tr>
-<td class="concept">Passer à l'itération suivante</td>
-<td><code>continue</code></td>
-<td><code>continue;</code></td>
-</tr>
-<tr>
-<td class="concept">Enumerate (index + valeur)</td>
-<td><code>for i, val in enumerate(liste):</code></td>
-<td><code>for (int i=0; i<liste.size(); i++) {<br>&nbsp;&nbsp;val = liste.get(i);<br>}</code></td>
-</tr>
-<tr>
-<td class="concept">Range avec step</td>
-<td><code>for i in range(0, 10, 2):</code></td>
-<td><code>for (int i=0; i<10; i+=2) {</code></td>
-</tr>
-
-<!-- LISTES -->
-<tr class="category">
-<td colspan="3">📋 LISTES & TABLEAUX</td>
-</tr>
-<tr>
-<td class="concept">Créer une liste</td>
-<td><code>liste = [1, 2, 3]</code></td>
-<td><code>int[] liste = {1, 2, 3};</code></td>
-</tr>
-<tr>
-<td class="concept">Liste dynamique</td>
-<td><code>liste = []</code></td>
-<td><code>ArrayList<Integer> liste = new ArrayList<>();</code></td>
-</tr>
-<tr>
-<td class="concept">Accéder à un élément</td>
-<td><code>liste[0]</code></td>
-<td><code>liste[0] ou liste.get(0)</code></td>
-</tr>
-<tr>
-<td class="concept">Ajouter un élément</td>
-<td><code>liste.append(4)</code></td>
-<td><code>liste.add(4);</code></td>
-</tr>
-<tr>
-<td class="concept">Longueur</td>
-<td><code>len(liste)</code></td>
-<td><code>liste.length ou liste.size()</code></td>
-</tr>
-<tr>
-<td class="concept">Slicing (extraction)</td>
-<td><code>liste[1:4]</code></td>
-<td><code>liste.subList(1, 4)</code></td>
-</tr>
-<tr>
-<td class="concept">Index négatif</td>
-<td><code>liste[-1]</code></td>
-<td><code>liste[liste.length - 1]</code></td>
-</tr>
-<tr>
-<td class="concept">Compréhension de liste</td>
-<td><code>[x*2 for x in range(5)]</code></td>
-<td><code>IntStream.range(0,5).map(x->x*2).toArray()</code></td>
-</tr>
-<tr>
-<td class="concept">Vérifier présence</td>
-<td><code>if x in liste:</code></td>
-<td><code>if (liste.contains(x)) {</code></td>
-</tr>
-<tr>
-<td class="concept">Inverser une liste</td>
-<td><code>liste.reverse()</code></td>
-<td><code>Collections.reverse(liste);</code></td>
-</tr>
-<tr>
-<td class="concept">Trier une liste</td>
-<td><code>liste.sort()</code></td>
-<td><code>Collections.sort(liste);</code></td>
-</tr>
-
-<!-- TUPLES & SETS -->
-<tr class="category">
-<td colspan="3">🎯 TUPLES & SETS</td>
-</tr>
-<tr>
-<td class="concept">Tuple (immuable)</td>
-<td><code>t = (1, 2, 3)</code></td>
-<td><code>// Pas d'équivalent direct</code></td>
-</tr>
-<tr>
-<td class="concept">Unpacking</td>
-<td><code>a, b, c = (1, 2, 3)</code></td>
-<td><code>// Pas d'équivalent direct</code></td>
-</tr>
-<tr>
-<td class="concept">Set (ensemble)</td>
-<td><code>s = {1, 2, 3}</code></td>
-<td><code>Set<Integer> s = new HashSet<>(Arrays.asList(1,2,3));</code></td>
-</tr>
-<tr>
-<td class="concept">Ajouter à un set</td>
-<td><code>s.add(4)</code></td>
-<td><code>s.add(4);</code></td>
-</tr>
-
-<!-- FONCTIONS -->
-<tr class="category">
-<td colspan="3">⚙️ FONCTIONS</td>
-</tr>
-<tr>
-<td class="concept">Définir une fonction</td>
-<td><code>def ma_fonction():</code></td>
-<td><code>public static void maFonction() {</code></td>
-</tr>
-<tr>
-<td class="concept">Avec paramètres</td>
-<td><code>def add(a, b):</code></td>
-<td><code>public static int add(int a, int b) {</code></td>
-</tr>
-<tr>
-<td class="concept">Retourner une valeur</td>
-<td><code>return resultat</code></td>
-<td><code>return resultat;</code></td>
-</tr>
-<tr>
-<td class="concept">Appeler une fonction</td>
-<td><code>ma_fonction()</code></td>
-<td><code>maFonction();</code></td>
-</tr>
-<tr>
-<td class="concept">Paramètre par défaut</td>
-<td><code>def func(a, b=5):</code></td>
-<td><code>// Surcharge de méthode nécessaire</code></td>
-</tr>
-<tr>
-<td class="concept">Lambda (fonction anonyme)</td>
-<td><code>lambda x: x * 2</code></td>
-<td><code>x -> x * 2</code></td>
-</tr>
-<tr>
-<td class="concept">Map sur liste</td>
-<td><code>list(map(lambda x: x*2, liste))</code></td>
-<td><code>liste.stream().map(x -> x*2).collect(Collectors.toList())</code></td>
-</tr>
-<tr>
-<td class="concept">Filter sur liste</td>
-<td><code>list(filter(lambda x: x>0, liste))</code></td>
-<td><code>liste.stream().filter(x -> x>0).collect(Collectors.toList())</code></td>
-</tr>
-<tr>
-<td class="concept">Zip (combiner listes)</td>
-<td><code>list(zip(a, b))</code></td>
-<td><code>// Pas d'équivalent direct simple</code></td>
-</tr>
-
-<!-- ENTRÉE UTILISATEUR -->
-<tr class="category">
-<td colspan="3">⌨️ ENTRÉE UTILISATEUR</td>
-</tr>
-<tr>
-<td class="concept">Lire texte</td>
-<td><code>input("Nom: ")</code></td>
-<td><code>Scanner sc = new Scanner(System.in);<br>sc.nextLine();</code></td>
-</tr>
-<tr>
-<td class="concept">Lire entier</td>
-<td><code>int(input())</code></td>
-<td><code>sc.nextInt();</code></td>
-</tr>
-
-<!-- CHAÎNES -->
-<tr class="category">
-<td colspan="3">📝 MANIPULATION DE TEXTE</td>
-</tr>
-<tr>
-<td class="concept">Concaténation</td>
-<td><code>"Hello " + "World"</code></td>
-<td><code>"Hello " + "World"</code></td>
-</tr>
-<tr>
-<td class="concept">Longueur</td>
-<td><code>len(texte)</code></td>
-<td><code>texte.length()</code></td>
-</tr>
-<tr>
-<td class="concept">Majuscules</td>
-<td><code>texte.upper()</code></td>
-<td><code>texte.toUpperCase()</code></td>
-</tr>
-<tr>
-<td class="concept">Minuscules</td>
-<td><code>texte.lower()</code></td>
-<td><code>texte.toLowerCase()</code></td>
-</tr>
-<tr>
-<td class="concept">Split (découper)</td>
-<td><code>texte.split(",")</code></td>
-<td><code>texte.split(",")</code></td>
-</tr>
-<tr>
-<td class="concept">Join (joindre)</td>
-<td><code>",".join(liste)</code></td>
-<td><code>String.join(",", liste)</code></td>
-</tr>
-<tr>
-<td class="concept">Strip (enlever espaces)</td>
-<td><code>texte.strip()</code></td>
-<td><code>texte.trim()</code></td>
-</tr>
-<tr>
-<td class="concept">Replace</td>
-<td><code>texte.replace("a", "b")</code></td>
-<td><code>texte.replace("a", "b")</code></td>
-</tr>
-<tr>
-<td class="concept">Substring</td>
-<td><code>texte[0:5]</code></td>
-<td><code>texte.substring(0, 5)</code></td>
-</tr>
-
-<!-- COMMENTAIRES -->
-<tr class="category">
-<td colspan="3">💬 COMMENTAIRES</td>
-</tr>
-<tr>
-<td class="concept">Commentaire ligne</td>
-<td><code># Commentaire</code></td>
-<td><code>// Commentaire</code></td>
-</tr>
-<tr>
-<td class="concept">Commentaire bloc</td>
-<td><code>"""Bloc"""</code></td>
-<td><code>/* Bloc */</code></td>
-</tr>
-
-<!-- CLASSES -->
-<tr class="category">
-<td colspan="3">🏗️ PROGRAMMATION ORIENTÉE OBJET</td>
-</tr>
-<tr>
-<td class="concept">Définir une classe</td>
-<td><code>class Personne:</code></td>
-<td><code>public class Personne {</code></td>
-</tr>
-<tr>
-<td class="concept">Constructeur</td>
-<td><code>def __init__(self, nom):</code></td>
-<td><code>public Personne(String nom) {</code></td>
-</tr>
-<tr>
-<td class="concept">Créer objet</td>
-<td><code>p = Personne("Alice")</code></td>
-<td><code>Personne p = new Personne("Alice");</code></td>
-</tr>
-<tr>
-<td class="concept">Attribut de classe</td>
-<td><code>self.nom = nom</code></td>
-<td><code>this.nom = nom;</code></td>
-</tr>
-<tr>
-<td class="concept">Méthode</td>
-<td><code>def saluer(self):</code></td>
-<td><code>public void saluer() {</code></td>
-</tr>
-<tr>
-<td class="concept">Héritage</td>
-<td><code>class Dog(Animal):</code></td>
-<td><code>public class Dog extends Animal {</code></td>
-</tr>
-<tr>
-<td class="concept">Interface</td>
-<td><code># Classe abstraite ou Protocol</code></td>
-<td><code>public interface Comparable {</code></td>
-</tr>
-<tr>
-<td class="concept">Méthode abstraite</td>
-<td><code>from abc import ABC, abstractmethod</code></td>
-<td><code>abstract void method();</code></td>
-</tr>
-
-<!-- GESTION D'ERREURS -->
-<tr class="category">
-<td colspan="3">⚠️ GESTION D'ERREURS</td>
-</tr>
-<tr>
-<td class="concept">Bloc try</td>
-<td><code>try:</code></td>
-<td><code>try {</code></td>
-</tr>
-<tr>
-<td class="concept">Capturer exception</td>
-<td><code>except ValueError:</code></td>
-<td><code>} catch (ValueError e) {</code></td>
-</tr>
-<tr>
-<td class="concept">Bloc finally</td>
-<td><code>finally:</code></td>
-<td><code>} finally {</code></td>
-</tr>
-<tr>
-<td class="concept">Lever une exception</td>
-<td><code>raise ValueError("Erreur")</code></td>
-<td><code>throw new Exception("Erreur");</code></td>
-</tr>
-<tr>
-<td class="concept">Context manager (with)</td>
-<td><code>with open("f.txt") as f:</code></td>
-<td><code>try (FileReader f = new FileReader("f.txt")) {</code></td>
-</tr>
-
-<!-- DICTIONNAIRES -->
-<tr class="category">
-<td colspan="3">🗂️ DICTIONNAIRES & MAPS</td>
-</tr>
-<tr>
-<td class="concept">Créer un dictionnaire</td>
-<td><code>d = {"nom": "Alice"}</code></td>
-<td><code>HashMap<String, String> d = new HashMap<>();</code></td>
-</tr>
-<tr>
-<td class="concept">Ajouter/Modifier valeur</td>
-<td><code>d["nom"] = "Bob"</code></td>
-<td><code>d.put("nom", "Bob");</code></td>
-</tr>
-<tr>
-<td class="concept">Accéder à valeur</td>
-<td><code>d["nom"]</code></td>
-<td><code>d.get("nom")</code></td>
-</tr>
-<tr>
-<td class="concept">Vérifier clé existe</td>
-<td><code>"nom" in d</code></td>
-<td><code>d.containsKey("nom")</code></td>
-</tr>
-<tr>
-<td class="concept">Parcourir dictionnaire</td>
-<td><code>for k, v in d.items():</code></td>
-<td><code>for (Map.Entry<K,V> e : d.entrySet()) {</code></td>
-</tr>
-<tr>
-<td class="concept">Clés du dictionnaire</td>
-<td><code>d.keys()</code></td>
-<td><code>d.keySet()</code></td>
-</tr>
-<tr>
-<td class="concept">Valeurs du dictionnaire</td>
-<td><code>d.values()</code></td>
-<td><code>d.values()</code></td>
-</tr>
-
-<!-- FICHIERS -->
-<tr class="category">
-<td colspan="3">📁 FICHIERS</td>
-</tr>
-<tr>
-<td class="concept">Ouvrir fichier lecture</td>
-<td><code>with open("file.txt", "r") as f:</code></td>
-<td><code>BufferedReader br = new BufferedReader(new FileReader("file.txt"));</code></td>
-</tr>
-<tr>
-<td class="concept">Lire ligne par ligne</td>
-<td><code>for ligne in f:</code></td>
-<td><code>while((ligne = br.readLine()) != null) {</code></td>
-</tr>
-<tr>
-<td class="concept">Écrire dans fichier</td>
-<td><code>with open("file.txt", "w") as f:<br>&nbsp;&nbsp;f.write("texte")</code></td>
-<td><code>FileWriter fw = new FileWriter("file.txt");<br>fw.write("texte");</code></td>
-</tr>
-<tr>
-<td class="concept">Lire tout le fichier</td>
-<td><code>f.read()</code></td>
-<td><code>Files.readString(Path.of("file.txt"))</code></td>
-</tr>
-
-<!-- IMPORTS -->
-<tr class="category">
-<td colspan="3">📚 IMPORTS & MODULES</td>
-</tr>
-<tr>
-<td class="concept">Importer module</td>
-<td><code>import math</code></td>
-<td><code>import java.util.*;</code></td>
-</tr>
-<tr>
-<td class="concept">Import spécifique</td>
-<td><code>from math import sqrt</code></td>
-<td><code>import static java.lang.Math.sqrt;</code></td>
-</tr>
-<tr>
-<td class="concept">Import avec alias</td>
-<td><code>import numpy as np</code></td>
-<td><code>// Pas d'équivalent direct</code></td>
-</tr>
-
-<!-- NULL -->
-<tr class="category">
-<td colspan="3">∅ VALEURS NULLES</td>
-</tr>
-<tr>
-<td class="concept">Valeur nulle</td>
-<td><code>None</code></td>
-<td><code>null</code></td>
-</tr>
-<tr>
-<td class="concept">Vérifier si null</td>
-<td><code>if x is None:</code></td>
-<td><code>if (x == null) {</code></td>
-</tr>
-<tr>
-<td class="concept">Valeur par défaut si null</td>
-<td><code>x or "default"</code></td>
-<td><code>x != null ? x : "default"</code></td>
-</tr>
-
-<!-- FORMATAGE -->
-<tr class="category">
-<td colspan="3">✨ FORMATAGE DE TEXTE</td>
-</tr>
-<tr>
-<td class="concept">F-string / Interpolation</td>
-<td><code>f"Bonjour {nom}"</code></td>
-<td><code>String.format("Bonjour %s", nom)</code></td>
-</tr>
-<tr>
-<td class="concept">Format avec variables</td>
-<td><code>f"{age} ans"</code></td>
-<td><code>age + " ans"</code></td>
-</tr>
-<tr>
-<td class="concept">Format nombre décimal</td>
-<td><code>f"{pi:.2f}"</code></td>
-<td><code>String.format("%.2f", pi)</code></td>
-</tr>
-
-<!-- MÉTHODES UTILES -->
-<tr class="category">
-<td colspan="3">🛠️ MÉTHODES UTILES</td>
-</tr>
-<tr>
-<td class="concept">Conversion en string</td>
-<td><code>str(42)</code></td>
-<td><code>String.valueOf(42)</code></td>
-</tr>
-<tr>
-<td class="concept">Conversion en int</td>
-<td><code>int("42")</code></td>
-<td><code>Integer.parseInt("42")</code></td>
-</tr>
-<tr>
-<td class="concept">Arrondir</td>
-<td><code>round(3.7)</code></td>
-<td><code>Math.round(3.7)</code></td>
-</tr>
-<tr>
-<td class="concept">Valeur absolue</td>
-<td><code>abs(-5)</code></td>
-<td><code>Math.abs(-5)</code></td>
-</tr>
-<tr>
-<td class="concept">Min/Max</td>
-<td><code>min(a, b)</code></td>
-<td><code>Math.min(a, b)</code></td>
-</tr>
-<tr>
-<td class="concept">Racine carrée</td>
-<td><code>math.sqrt(16)</code></td>
-<td><code>Math.sqrt(16)</code></td>
-</tr>
-<tr>
-<td class="concept">Nombre aléatoire</td>
-<td><code>import random; random.random()</code></td>
-<td><code>Math.random()</code></td>
-</tr>
-<tr>
-<td class="concept">Type d'une variable</td>
-<td><code>type(x)</code></td>
-<td><code>x.getClass()</code></td>
-</tr>
-
-<!-- STRUCTURE PROGRAMME -->
-<tr class="category">
-<td colspan="3">🚀 STRUCTURE PROGRAMME</td>
-</tr>
-<tr>
-<td class="concept">Point d'entrée</td>
-<td><code>if __name__ == "__main__":</code></td>
-<td><code>public static void main(String[] args) {</code></td>
-</tr>
-<tr>
-<td class="concept">Arguments ligne commande</td>
-<td><code>import sys; sys.argv</code></td>
-<td><code>args[0], args[1]...</code></td>
-</tr>
-
-<!-- AUTRES -->
-<tr class="category">
-<td colspan="3">🎁 DIVERS</td>
-</tr>
-<tr>
-<td class="concept">Décorateur</td>
-<td><code>@decorator</code></td>
-<td><code>@Annotation</code></td>
-</tr>
-<tr>
-<td class="concept">Generics (types paramétrés)</td>
-<td><code># Duck typing</code></td>
-<td><code>List<String> liste = new ArrayList<>();</code></td>
-</tr>
-<tr>
-<td class="concept">Assert (test)</td>
-<td><code>assert x > 0</code></td>
-<td><code>assert x > 0;</code></td>
-</tr>
-<tr>
-<td class="concept">Pause/Sleep</td>
-<td><code>import time; time.sleep(1)</code></td>
-<td><code>Thread.sleep(1000);</code></td>
-</tr>
-<tr>
-<td class="concept">Afficher type</td>
-<td><code>print(type(x))</code></td>
-<td><code>System.out.println(x.getClass());</code></td>
-</tr>
-</tbody>
-</table>
-
-<div class="no-results" id="noResults">
-<div class="no-results-icon">🔍</div>
-<h3>Aucun résultat trouvé</h3>
-<p>Essayez avec d'autres mots-clés</p>
-</div>
-</div>
-
-<footer>
-<p>💡 Astuce : Cliquez sur le code pour le copier | Créé par un 👽 pour des 👽</p>
-</footer>
-</div>
-
-<script>
-const themeToggle = document.getElementById('themeToggle');
-const searchInput = document.getElementById('searchInput');
-const table = document.getElementById('comparisonTable');
-const tbody = table.querySelector('tbody');
-const noResults = document.getElementById('noResults');
-const totalCount = document.getElementById('totalCount');
-const visibleCount = document.getElementById('visibleCount');
-const categoryCount = document.getElementById('categoryCount');
-
-// Theme management
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-
-themeToggle.addEventListener('click', () => {
-const currentTheme = document.documentElement.getAttribute('data-theme');
-const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-document.documentElement.setAttribute('data-theme', newTheme);
-});
-
-// Search functionality
-const allRows = Array.from(tbody.querySelectorAll('tr:not(.category)'));
-const categories = Array.from(tbody.querySelectorAll('tr.category'));
-
-function updateStats() {
-const visible = allRows.filter(row => !row.classList.contains('hidden')).length;
-totalCount.textContent = allRows.length;
-visibleCount.textContent = visible;
-categoryCount.textContent = categories.length;
+    <div class="table-container">
+        <table id="comparisonTable">
+            <thead>
+                <tr>
+                    <th style="width: 25%">Concept</th>
+                    <th class="th-python" style="width: 37.5%">
+                        Python
+                        <a href="https://docs.python.org/3/" target="_blank" class="doc-link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                            docs
+                        </a>
+                    </th>
+                    <th class="th-java" style="width: 37.5%">
+                        Java
+                        <a href="https://docs.oracle.com/en/java/javase/" target="_blank" class="doc-link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                            docs
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- AFFICHAGE -->
+                <tr class="category"><td colspan="3">Affichage</td></tr>
+                <tr>
+                    <td class="concept">Afficher du texte</td>
+                    <td><code data-example='name = "Alice"
+age = 25
+print(f"Bonjour {name}, {age} ans")'>print("Hello")<span class="tooltip"></span></code></td>
+                    <td><code data-example='String name = "Alice";
+int age = 25;
+System.out.println("Bonjour " + name + ", " + age + " ans");'>System.out.println("Hello");<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Afficher sans retour ligne</td>
+                    <td><code data-example='for i in range(3):
+    print(i, end=" ")
+# Affiche: 0 1 2'>print("Hi", end="")<span class="tooltip"></span></code></td>
+                    <td><code data-example='for (int i = 0; i < 3; i++) {
+    System.out.print(i + " ");
 }
+// Affiche: 0 1 2'>System.out.print("Hi");<span class="tooltip"></span></code></td>
+                </tr>
 
-function applyFilters() {
-const searchTerm = searchInput.value.toLowerCase().trim();
-let hasResults = false;
+                <!-- VARIABLES -->
+                <tr class="category"><td colspan="3">Variables & Types</td></tr>
+                <tr>
+                    <td class="concept">Déclaration variable</td>
+                    <td><code data-example='x = 5
+y = 10
+total = x + y'>x = 5<span class="tooltip"></span></code></td>
+                    <td><code data-example='int x = 5;
+int y = 10;
+int total = x + y;'>int x = 5;<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Constante</td>
+                    <td><code data-example='MAX_USERS = 100
+MIN_AGE = 18'>MAX = 100<span class="tooltip"></span></code></td>
+                    <td><code data-example='final int MAX_USERS = 100;
+final int MIN_AGE = 18;'>final int MAX = 100;<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Entier</td>
+                    <td><code data-example='age = 25
+count = 0
+score = -10'>age = 25<span class="tooltip"></span></code></td>
+                    <td><code data-example='int age = 25;
+int count = 0;
+int score = -10;'>int age = 25;<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Décimal</td>
+                    <td><code data-example='pi = 3.14159
+price = 19.99
+temp = -5.5'>pi = 3.14<span class="tooltip"></span></code></td>
+                    <td><code data-example='double pi = 3.14159;
+double price = 19.99;
+double temp = -5.5;'>double pi = 3.14;<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Texte</td>
+                    <td><code data-example='nom = "Alice"
+ville = "Paris"
+message = "Bonjour"'>nom = "Alice"<span class="tooltip"></span></code></td>
+                    <td><code data-example='String nom = "Alice";
+String ville = "Paris";
+String message = "Bonjour";'>String nom = "Alice";<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Booléen</td>
+                    <td><code data-example='actif = True
+valide = False
+if actif:
+    print("OK")'>actif = True<span class="tooltip"></span></code></td>
+                    <td><code data-example='boolean actif = true;
+boolean valide = false;
+if (actif) {
+    System.out.println("OK");
+}'>boolean actif = true;<span class="tooltip"></span></code></td>
+                </tr>
 
-allRows.forEach(row => {
-const text = row.textContent.toLowerCase();
-const matchesSearch = searchTerm === '' || text.includes(searchTerm);
+                <!-- OPÉRATEURS -->
+                <tr class="category"><td colspan="3">Opérateurs</td></tr>
+                <tr>
+                    <td class="concept">Addition</td>
+                    <td><code data-example='x = 10
+y = 5
+somme = x + y'>a + b<span class="tooltip"></span></code></td>
+                    <td><code data-example='int x = 10;
+int y = 5;
+int somme = x + y;'>a + b<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Division entière <span class="warning" title="Comportement différent">!</span></td>
+                    <td><code data-example='resultat = 7 // 2  # 3
+reste = 7 % 2       # 1'>a // b<span class="tooltip"></span></code></td>
+                    <td><code data-example='int resultat = 7 / 2;  // 3
+int reste = 7 % 2;       // 1'>a / b<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Modulo</td>
+                    <td><code data-example='pair = 8 % 2 == 0  # True
+reste = 10 % 3      # 1'>a % b<span class="tooltip"></span></code></td>
+                    <td><code data-example='boolean pair = 8 % 2 == 0;  // true
+int reste = 10 % 3;          // 1'>a % b<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Puissance</td>
+                    <td><code data-example='carre = 5 ** 2      # 25
+cube = 2 ** 3        # 8'>a ** b<span class="tooltip"></span></code></td>
+                    <td><code data-example='double carre = Math.pow(5, 2);  // 25.0
+double cube = Math.pow(2, 3);   // 8.0'>Math.pow(a, b)<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Incrément</td>
+                    <td><code data-example='compteur = 0
+compteur += 1
+compteur += 5'>x += 1<span class="tooltip"></span></code></td>
+                    <td><code data-example='int compteur = 0;
+compteur++;
+compteur += 5;'>x++<span class="tooltip"></span></code></td>
+                </tr>
 
-if (matchesSearch) {
-row.classList.remove('hidden');
-hasResults = true;
+                <!-- CONDITIONS -->
+                <tr class="category"><td colspan="3">Conditions</td></tr>
+                <tr>
+                    <td class="concept">Si</td>
+                    <td><code data-example='age = 18
+if age >= 18:
+    print("Majeur")'>if x > 0:<span class="tooltip"></span></code></td>
+                    <td><code data-example='int age = 18;
+if (age >= 18) {
+    System.out.println("Majeur");
+}'>if (x > 0) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Sinon si</td>
+                    <td><code data-example='score = 75
+if score >= 90:
+    grade = "A"
+elif score >= 75:
+    grade = "B"'>elif x < 0:<span class="tooltip"></span></code></td>
+                    <td><code data-example='int score = 75;
+if (score >= 90) {
+    grade = "A";
+} else if (score >= 75) {
+    grade = "B";
+}'>} else if (x < 0) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Sinon</td>
+                    <td><code data-example='age = 15
+if age >= 18:
+    print("Majeur")
+else:
+    print("Mineur")'>else:<span class="tooltip"></span></code></td>
+                    <td><code data-example='int age = 15;
+if (age >= 18) {
+    System.out.println("Majeur");
 } else {
-row.classList.add('hidden');
-}
-});
+    System.out.println("Mineur");
+}'>} else {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">ET logique</td>
+                    <td><code data-example='age = 25
+permis = True
+if age >= 18 and permis:
+    print("Peut conduire")'>and<span class="tooltip"></span></code></td>
+                    <td><code data-example='int age = 25;
+boolean permis = true;
+if (age >= 18 && permis) {
+    System.out.println("Peut conduire");
+}'>&&<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">OU logique</td>
+                    <td><code data-example='jour = "samedi"
+if jour == "samedi" or jour == "dimanche":
+    print("Week-end")'>or<span class="tooltip"></span></code></td>
+                    <td><code data-example='String jour = "samedi";
+if (jour.equals("samedi") || jour.equals("dimanche")) {
+    System.out.println("Week-end");
+}'>||<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">NON logique</td>
+                    <td><code data-example='connecte = False
+if not connecte:
+    print("Veuillez vous connecter")'>not<span class="tooltip"></span></code></td>
+                    <td><code data-example='boolean connecte = false;
+if (!connecte) {
+    System.out.println("Veuillez vous connecter");
+}'>!<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Opérateur ternaire</td>
+                    <td><code data-example='age = 20
+statut = "majeur" if age >= 18 else "mineur"'>x if condition else y<span class="tooltip"></span></code></td>
+                    <td><code data-example='int age = 20;
+String statut = (age >= 18) ? "majeur" : "mineur";'>condition ? x : y<span class="tooltip"></span></code></td>
+                </tr>
 
-categories.forEach(cat => {
-let nextRow = cat.nextElementSibling;
-let hasVisibleRows = false;
-while (nextRow && !nextRow.classList.contains('category')) {
-if (!nextRow.classList.contains('hidden')) {
-hasVisibleRows = true;
-break;
-}
-nextRow = nextRow.nextElementSibling;
-}
-cat.style.display = hasVisibleRows ? '' : 'none';
-});
+                <!-- BOUCLES -->
+                <tr class="category"><td colspan="3">Boucles</td></tr>
+                <tr>
+                    <td class="concept">Boucle for (range)</td>
+                    <td><code data-example='for i in range(5):
+    print(f"Tour {i}")'>for i in range(5):<span class="tooltip"></span></code></td>
+                    <td><code data-example='for (int i = 0; i < 5; i++) {
+    System.out.println("Tour " + i);
+}'>for (int i=0; i<5; i++) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Boucle for (liste)</td>
+                    <td><code data-example='fruits = ["pomme", "banane", "orange"]
+for fruit in fruits:
+    print(fruit)'>for item in liste:<span class="tooltip"></span></code></td>
+                    <td><code data-example='String[] fruits = {"pomme", "banane", "orange"};
+for (String fruit : fruits) {
+    System.out.println(fruit);
+}'>for (Type item : liste) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Boucle while</td>
+                    <td><code data-example='count = 0
+while count < 5:
+    print(count)
+    count += 1'>while x > 0:<span class="tooltip"></span></code></td>
+                    <td><code data-example='int count = 0;
+while (count < 5) {
+    System.out.println(count);
+    count++;
+}'>while (x > 0) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Sortir de boucle</td>
+                    <td><code data-example='for i in range(10):
+    if i == 5:
+        break
+    print(i)'>break<span class="tooltip"></span></code></td>
+                    <td><code data-example='for (int i = 0; i < 10; i++) {
+    if (i == 5) break;
+    System.out.println(i);
+}'>break;<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Passer à l'itération suivante</td>
+                    <td><code data-example='for i in range(5):
+    if i == 2:
+        continue
+    print(i)'>continue<span class="tooltip"></span></code></td>
+                    <td><code data-example='for (int i = 0; i < 5; i++) {
+    if (i == 2) continue;
+    System.out.println(i);
+}'>continue;<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Enumerate</td>
+                    <td><code data-example='noms = ["Alice", "Bob", "Charlie"]
+for i, nom in enumerate(noms):
+    print(f"{i}: {nom}")'>for i, val in enumerate(liste):<span class="tooltip"></span></code></td>
+                    <td><code data-example='String[] noms = {"Alice", "Bob", "Charlie"};
+for (int i = 0; i < noms.length; i++) {
+    System.out.println(i + ": " + noms[i]);
+}'>for (int i=0; i&lt;liste.size(); i++) { val = liste.get(i); }<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Range avec step</td>
+                    <td><code data-example='for i in range(0, 10, 2):
+    print(i)  # 0, 2, 4, 6, 8'>for i in range(0, 10, 2):<span class="tooltip"></span></code></td>
+                    <td><code data-example='for (int i = 0; i < 10; i += 2) {
+    System.out.println(i);  // 0, 2, 4, 6, 8
+}'>for (int i=0; i<10; i+=2) {<span class="tooltip"></span></code></td>
+                </tr>
 
-noResults.classList.toggle('visible', !hasResults);
-updateStats();
+                <!-- LISTES -->
+                <tr class="category"><td colspan="3">Listes & Tableaux</td></tr>
+                <tr>
+                    <td class="concept">Créer une liste</td>
+                    <td><code data-example='nombres = [1, 2, 3, 4, 5]
+noms = ["Alice", "Bob"]'>liste = [1, 2, 3]<span class="tooltip"></span></code></td>
+                    <td><code data-example='int[] nombres = {1, 2, 3, 4, 5};
+String[] noms = {"Alice", "Bob"};'>int[] liste = {1, 2, 3};<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Liste dynamique</td>
+                    <td><code data-example='liste = []
+liste.append(1)
+liste.append(2)'>liste = []<span class="tooltip"></span></code></td>
+                    <td><code data-example='ArrayList<Integer> liste = new ArrayList<>();
+liste.add(1);
+liste.add(2);'>ArrayList&lt;Integer&gt; liste = new ArrayList&lt;&gt;();<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Accéder à un élément</td>
+                    <td><code data-example='fruits = ["pomme", "banane", "orange"]
+premier = fruits[0]  # "pomme"'>liste[0]<span class="tooltip"></span></code></td>
+                    <td><code data-example='String[] fruits = {"pomme", "banane", "orange"};
+String premier = fruits[0];  // "pomme"'>liste[0] ou liste.get(0)<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Ajouter un élément</td>
+                    <td><code data-example='scores = [10, 20, 30]
+scores.append(40)
+scores.append(50)'>liste.append(4)<span class="tooltip"></span></code></td>
+                    <td><code data-example='ArrayList<Integer> scores = new ArrayList<>();
+scores.add(40);
+scores.add(50);'>liste.add(4);<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Longueur</td>
+                    <td><code data-example='nombres = [1, 2, 3, 4, 5]
+taille = len(nombres)  # 5'>len(liste)<span class="tooltip"></span></code></td>
+                    <td><code data-example='int[] nombres = {1, 2, 3, 4, 5};
+int taille = nombres.length;  // 5'>liste.length ou liste.size()<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Slicing</td>
+                    <td><code data-example='nombres = [0, 1, 2, 3, 4, 5]
+sous = nombres[1:4]  # [1, 2, 3]'>liste[1:4]<span class="tooltip"></span></code></td>
+                    <td><code data-example='List<Integer> nombres = Arrays.asList(0, 1, 2, 3, 4, 5);
+List<Integer> sous = nombres.subList(1, 4);'>liste.subList(1, 4)<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Index négatif</td>
+                    <td><code data-example='nombres = [1, 2, 3, 4, 5]
+dernier = nombres[-1]  # 5'>liste[-1]<span class="tooltip"></span></code></td>
+                    <td><code data-example='int[] nombres = {1, 2, 3, 4, 5};
+int dernier = nombres[nombres.length - 1];  // 5'>liste[liste.length - 1]<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Vérifier présence</td>
+                    <td><code data-example='fruits = ["pomme", "banane"]
+if "pomme" in fruits:
+    print("Trouvé")'>if x in liste:<span class="tooltip"></span></code></td>
+                    <td><code data-example='List<String> fruits = Arrays.asList("pomme", "banane");
+if (fruits.contains("pomme")) {
+    System.out.println("Trouvé");
+}'>if (liste.contains(x)) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Inverser</td>
+                    <td><code data-example='nombres = [1, 2, 3, 4]
+nombres.reverse()  # [4, 3, 2, 1]'>liste.reverse()<span class="tooltip"></span></code></td>
+                    <td><code data-example='List<Integer> nombres = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
+Collections.reverse(nombres);'>Collections.reverse(liste);<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Trier</td>
+                    <td><code data-example='nombres = [3, 1, 4, 1, 5]
+nombres.sort()  # [1, 1, 3, 4, 5]'>liste.sort()<span class="tooltip"></span></code></td>
+                    <td><code data-example='List<Integer> nombres = new ArrayList<>(Arrays.asList(3, 1, 4, 1, 5));
+Collections.sort(nombres);'>Collections.sort(liste);<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- FONCTIONS -->
+                <tr class="category"><td colspan="3">Fonctions</td></tr>
+                <tr>
+                    <td class="concept">Définir une fonction</td>
+                    <td><code data-example='def dire_bonjour():
+    print("Bonjour !")
+    
+dire_bonjour()'>def ma_fonction():<span class="tooltip"></span></code></td>
+                    <td><code data-example='public static void direBonjour() {
+    System.out.println("Bonjour !");
+}
+direBonjour();'>public static void maFonction() {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Avec paramètres</td>
+                    <td><code data-example='def add(a, b):
+    return a + b
+    
+resultat = add(5, 3)'>def add(a, b):<span class="tooltip"></span></code></td>
+                    <td><code data-example='public static int add(int a, int b) {
+    return a + b;
+}
+int resultat = add(5, 3);'>public static int add(int a, int b) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Retourner une valeur</td>
+                    <td><code data-example='def carre(x):
+    return x * x
+    
+resultat = carre(5)'>return resultat<span class="tooltip"></span></code></td>
+                    <td><code data-example='public static int carre(int x) {
+    return x * x;
+}
+int resultat = carre(5);'>return resultat;<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Appeler une fonction</td>
+                    <td><code data-example='def saluer(nom):
+    print(f"Bonjour {nom}")
+    
+saluer("Alice")'>ma_fonction()<span class="tooltip"></span></code></td>
+                    <td><code data-example='public static void saluer(String nom) {
+    System.out.println("Bonjour " + nom);
+}
+saluer("Alice");'>maFonction();<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Lambda</td>
+                    <td><code data-example='double = lambda x: x * 2
+resultat = double(5)  # 10'>lambda x: x * 2<span class="tooltip"></span></code></td>
+                    <td><code data-example='Function<Integer, Integer> double = x -> x * 2;
+int resultat = double.apply(5);  // 10'>x -> x * 2<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- ENTRÉE UTILISATEUR -->
+                <tr class="category"><td colspan="3">Entrée Utilisateur</td></tr>
+                <tr>
+                    <td class="concept">Lire texte</td>
+                    <td><code data-example='nom = input("Votre nom: ")
+print(f"Bonjour {nom}")'>input("Nom: ")<span class="tooltip"></span></code></td>
+                    <td><code data-example='Scanner sc = new Scanner(System.in);
+System.out.print("Votre nom: ");
+String nom = sc.nextLine();'>Scanner sc = new Scanner(System.in); sc.nextLine();<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Lire entier</td>
+                    <td><code data-example='age = int(input("Votre âge: "))
+print(f"Dans 5 ans: {age + 5}")'>int(input())<span class="tooltip"></span></code></td>
+                    <td><code data-example='System.out.print("Votre âge: ");
+int age = sc.nextInt();
+System.out.println("Dans 5 ans: " + (age + 5));'>sc.nextInt();<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- CHAÎNES -->
+                <tr class="category"><td colspan="3">Manipulation de Texte</td></tr>
+                <tr>
+                    <td class="concept">Concaténation</td>
+                    <td><code data-example='prenom = "Alice"
+nom = "Dupont"
+complet = prenom + " " + nom'>"Hello " + "World"<span class="tooltip"></span></code></td>
+                    <td><code data-example='String prenom = "Alice";
+String nom = "Dupont";
+String complet = prenom + " " + nom;'>"Hello " + "World"<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Longueur</td>
+                    <td><code data-example='message = "Bonjour"
+taille = len(message)  # 7'>len(texte)<span class="tooltip"></span></code></td>
+                    <td><code data-example='String message = "Bonjour";
+int taille = message.length();  // 7'>texte.length()<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Majuscules</td>
+                    <td><code data-example='nom = "alice"
+nom_maj = nom.upper()  # "ALICE"'>texte.upper()<span class="tooltip"></span></code></td>
+                    <td><code data-example='String nom = "alice";
+String nomMaj = nom.toUpperCase();  // "ALICE"'>texte.toUpperCase()<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Minuscules</td>
+                    <td><code data-example='nom = "ALICE"
+nom_min = nom.lower()  # "alice"'>texte.lower()<span class="tooltip"></span></code></td>
+                    <td><code data-example='String nom = "ALICE";
+String nomMin = nom.toLowerCase();  // "alice"'>texte.toLowerCase()<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Split</td>
+                    <td><code data-example='csv = "pomme,banane,orange"
+fruits = csv.split(",")'>texte.split(",")<span class="tooltip"></span></code></td>
+                    <td><code data-example='String csv = "pomme,banane,orange";
+String[] fruits = csv.split(",");'>texte.split(",")<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Join</td>
+                    <td><code data-example='mots = ["Bonjour", "le", "monde"]
+phrase = " ".join(mots)'>",".join(liste)<span class="tooltip"></span></code></td>
+                    <td><code data-example='List<String> mots = Arrays.asList("Bonjour", "le", "monde");
+String phrase = String.join(" ", mots);'>String.join(",", liste)<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Strip</td>
+                    <td><code data-example='texte = "  hello  "
+propre = texte.strip()  # "hello"'>texte.strip()<span class="tooltip"></span></code></td>
+                    <td><code data-example='String texte = "  hello  ";
+String propre = texte.trim();  // "hello"'>texte.trim()<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Replace</td>
+                    <td><code data-example='phrase = "J\'aime le café"
+nouveau = phrase.replace("café", "thé")'>texte.replace("a", "b")<span class="tooltip"></span></code></td>
+                    <td><code data-example='String phrase = "J\'aime le café";
+String nouveau = phrase.replace("café", "thé");'>texte.replace("a", "b")<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Substring</td>
+                    <td><code data-example='texte = "Bonjour"
+debut = texte[0:3]  # "Bon"'>texte[0:5]<span class="tooltip"></span></code></td>
+                    <td><code data-example='String texte = "Bonjour";
+String debut = texte.substring(0, 3);  // "Bon"'>texte.substring(0, 5)<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- COMMENTAIRES -->
+                <tr class="category"><td colspan="3">Commentaires</td></tr>
+                <tr>
+                    <td class="concept">Commentaire ligne</td>
+                    <td><code data-example='x = 5  # Variable pour le calcul
+# Afficher le résultat
+print(x)'># Commentaire<span class="tooltip"></span></code></td>
+                    <td><code data-example='int x = 5;  // Variable pour le calcul
+// Afficher le résultat
+System.out.println(x);'>// Commentaire<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Commentaire bloc</td>
+                    <td><code data-example='"""
+Fonction de calcul
+Paramètres: a, b
+Retour: somme
+"""'>"""Bloc"""<span class="tooltip"></span></code></td>
+                    <td><code data-example='/*
+Fonction de calcul
+Paramètres: a, b
+Retour: somme
+*/'>/* Bloc */<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- CLASSES -->
+                <tr class="category"><td colspan="3">Programmation Orientée Objet</td></tr>
+                <tr>
+                    <td class="concept">Définir une classe</td>
+                    <td><code data-example='class Personne:
+    def __init__(self, nom):
+        self.nom = nom'>class Personne:<span class="tooltip"></span></code></td>
+                    <td><code data-example='public class Personne {
+    private String nom;
+    
+    public Personne(String nom) {
+        this.nom = nom;
+    }
+}'>public class Personne {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Constructeur</td>
+                    <td><code data-example='class Personne:
+    def __init__(self, nom, age):
+        self.nom = nom
+        self.age = age'>def __init__(self, nom):<span class="tooltip"></span></code></td>
+                    <td><code data-example='public class Personne {
+    private String nom;
+    private int age;
+    
+    public Personne(String nom, int age) {
+        this.nom = nom;
+        this.age = age;
+    }
+}'>public Personne(String nom) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Créer objet</td>
+                    <td><code data-example='alice = Personne("Alice", 25)
+bob = Personne("Bob", 30)'>p = Personne("Alice")<span class="tooltip"></span></code></td>
+                    <td><code data-example='Personne alice = new Personne("Alice", 25);
+Personne bob = new Personne("Bob", 30);'>Personne p = new Personne("Alice");<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Attribut</td>
+                    <td><code data-example='class Personne:
+    def __init__(self, nom):
+        self.nom = nom
+        self.age = 0'>self.nom = nom<span class="tooltip"></span></code></td>
+                    <td><code data-example='public class Personne {
+    private String nom;
+    
+    public Personne(String nom) {
+        this.nom = nom;
+    }
+}'>this.nom = nom;<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Méthode</td>
+                    <td><code data-example='class Personne:
+    def saluer(self):
+        print(f"Bonjour, je suis {self.nom}")'>def saluer(self):<span class="tooltip"></span></code></td>
+                    <td><code data-example='public class Personne {
+    public void saluer() {
+        System.out.println("Bonjour, je suis " + this.nom);
+    }
+}'>public void saluer() {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Héritage</td>
+                    <td><code data-example='class Animal:
+    def manger(self):
+        print("Miam")
+
+class Dog(Animal):
+    def aboyer(self):
+        print("Woof")'>class Dog(Animal):<span class="tooltip"></span></code></td>
+                    <td><code data-example='class Animal {
+    public void manger() {
+        System.out.println("Miam");
+    }
 }
 
-searchInput.addEventListener('input', applyFilters);
+class Dog extends Animal {
+    public void aboyer() {
+        System.out.println("Woof");
+    }
+}'>public class Dog extends Animal {<span class="tooltip"></span></code></td>
+                </tr>
 
-// Initialize stats
-updateStats();
+                <!-- GESTION D'ERREURS -->
+                <tr class="category"><td colspan="3">Gestion d'Erreurs</td></tr>
+                <tr>
+                    <td class="concept">Bloc try</td>
+                    <td><code data-example='try:
+    x = int(input("Nombre: "))
+    resultat = 10 / x'>try:<span class="tooltip"></span></code></td>
+                    <td><code data-example='try {
+    int x = Integer.parseInt(input);
+    int resultat = 10 / x;
+}'>try {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Capturer exception</td>
+                    <td><code data-example='try:
+    x = int("abc")
+except ValueError:
+    print("Erreur de conversion")'>except ValueError:<span class="tooltip"></span></code></td>
+                    <td><code data-example='try {
+    int x = Integer.parseInt("abc");
+} catch (NumberFormatException e) {
+    System.out.println("Erreur de conversion");
+}'>} catch (Exception e) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Bloc finally</td>
+                    <td><code data-example='try:
+    fichier = open("data.txt")
+finally:
+    fichier.close()'>finally:<span class="tooltip"></span></code></td>
+                    <td><code data-example='try {
+    BufferedReader fichier = new BufferedReader(new FileReader("data.txt"));
+} finally {
+    fichier.close();
+}'>} finally {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Lever une exception</td>
+                    <td><code data-example='def verifier_age(age):
+    if age < 0:
+        raise ValueError("Âge invalide")'>raise ValueError("Erreur")<span class="tooltip"></span></code></td>
+                    <td><code data-example='public void verifierAge(int age) throws Exception {
+    if (age < 0) {
+        throw new Exception("Âge invalide");
+    }
+}'>throw new Exception("Erreur");<span class="tooltip"></span></code></td>
+                </tr>
 
-// Copy code on click
-document.querySelectorAll('code').forEach(code => {
-code.title = 'Cliquer pour copier';
-code.addEventListener('click', async () => {
-try {
-await navigator.clipboard.writeText(code.textContent);
-code.classList.add('copied');
-setTimeout(() => {
-code.classList.remove('copied');
-}, 300);
-} catch (err) {
-console.log('Copie non disponible');
-}
-});
-});
+                <!-- DICTIONNAIRES -->
+                <tr class="category"><td colspan="3">Dictionnaires & Maps</td></tr>
+                <tr>
+                    <td class="concept">Créer un dictionnaire</td>
+                    <td><code data-example='personne = {
+    "nom": "Alice",
+    "age": 25
+}'>d = {"nom": "Alice"}<span class="tooltip"></span></code></td>
+                    <td><code data-example='HashMap<String, Object> personne = new HashMap<>();
+personne.put("nom", "Alice");
+personne.put("age", 25);'>HashMap&lt;String, String&gt; d = new HashMap&lt;&gt;();<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Ajouter/Modifier</td>
+                    <td><code data-example='scores = {}
+scores["Alice"] = 95
+scores["Bob"] = 87'>d["nom"] = "Bob"<span class="tooltip"></span></code></td>
+                    <td><code data-example='HashMap<String, Integer> scores = new HashMap<>();
+scores.put("Alice", 95);
+scores.put("Bob", 87);'>d.put("nom", "Bob");<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Accéder</td>
+                    <td><code data-example='personne = {"nom": "Alice", "age": 25}
+nom = personne["nom"]'>d["nom"]<span class="tooltip"></span></code></td>
+                    <td><code data-example='HashMap<String, String> personne = new HashMap<>();
+String nom = personne.get("nom");'>d.get("nom")<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Vérifier clé</td>
+                    <td><code data-example='personne = {"nom": "Alice"}
+if "age" in personne:
+    print(personne["age"])'>"nom" in d<span class="tooltip"></span></code></td>
+                    <td><code data-example='HashMap<String, String> personne = new HashMap<>();
+if (personne.containsKey("age")) {
+    System.out.println(personne.get("age"));
+}'>d.containsKey("nom")<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Parcourir</td>
+                    <td><code data-example='scores = {"Alice": 95, "Bob": 87}
+for nom, score in scores.items():
+    print(f"{nom}: {score}")'>for k, v in d.items():<span class="tooltip"></span></code></td>
+                    <td><code data-example='HashMap<String, Integer> scores = new HashMap<>();
+for (Map.Entry<String, Integer> e : scores.entrySet()) {
+    System.out.println(e.getKey() + ": " + e.getValue());
+}'>for (Map.Entry&lt;K,V&gt; e : d.entrySet()) {<span class="tooltip"></span></code></td>
+                </tr>
 
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-if (e.key === '/' && document.activeElement !== searchInput) {
-e.preventDefault();
-searchInput.focus();
-}
-if (e.key === 'Escape') {
-searchInput.value = '';
-searchInput.blur();
-applyFilters();
-}
-});
-</script>
+                <!-- FICHIERS -->
+                <tr class="category"><td colspan="3">Fichiers</td></tr>
+                <tr>
+                    <td class="concept">Ouvrir fichier</td>
+                    <td><code data-example='with open("data.txt", "r") as f:
+    contenu = f.read()
+    print(contenu)'>with open("file.txt", "r") as f:<span class="tooltip"></span></code></td>
+                    <td><code data-example='BufferedReader br = new BufferedReader(new FileReader("data.txt"));
+String contenu = br.readLine();
+br.close();'>BufferedReader br = new BufferedReader(new FileReader("file.txt"));<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Lire ligne par ligne</td>
+                    <td><code data-example='with open("data.txt") as f:
+    for ligne in f:
+        print(ligne.strip())'>for ligne in f:<span class="tooltip"></span></code></td>
+                    <td><code data-example='String ligne;
+while ((ligne = br.readLine()) != null) {
+    System.out.println(ligne);
+}'>while((ligne = br.readLine()) != null) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Écrire</td>
+                    <td><code data-example='with open("output.txt", "w") as f:
+    f.write("Première ligne\n")
+    f.write("Deuxième ligne")'>f.write("texte")<span class="tooltip"></span></code></td>
+                    <td><code data-example='FileWriter fw = new FileWriter("output.txt");
+fw.write("Première ligne\n");
+fw.write("Deuxième ligne");
+fw.close();'>fw.write("texte");<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- IMPORTS -->
+                <tr class="category"><td colspan="3">Imports</td></tr>
+                <tr>
+                    <td class="concept">Importer module</td>
+                    <td><code data-example='import math
+import random
+
+resultat = math.sqrt(16)'>import math<span class="tooltip"></span></code></td>
+                    <td><code data-example='import java.util.*;
+import java.io.*;
+
+double resultat = Math.sqrt(16);'>import java.util.*;<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Import spécifique</td>
+                    <td><code data-example='from math import sqrt, pi
+
+cercle = pi * 5 ** 2'>from math import sqrt<span class="tooltip"></span></code></td>
+                    <td><code data-example='import static java.lang.Math.sqrt;
+import static java.lang.Math.PI;
+
+double cercle = PI * Math.pow(5, 2);'>import static java.lang.Math.sqrt;<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- NULL -->
+                <tr class="category"><td colspan="3">Valeurs Nulles</td></tr>
+                <tr>
+                    <td class="concept">Valeur nulle</td>
+                    <td><code data-example='valeur = None
+if valeur is None:
+    print("Aucune valeur")'>None<span class="tooltip"></span></code></td>
+                    <td><code data-example='String valeur = null;
+if (valeur == null) {
+    System.out.println("Aucune valeur");
+}'>null<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Vérifier si null</td>
+                    <td><code data-example='nom = None
+if nom is None:
+    nom = "Anonyme"'>if x is None:<span class="tooltip"></span></code></td>
+                    <td><code data-example='String nom = null;
+if (nom == null) {
+    nom = "Anonyme";
+}'>if (x == null) {<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- FORMATAGE -->
+                <tr class="category"><td colspan="3">Formatage de Texte</td></tr>
+                <tr>
+                    <td class="concept">F-string</td>
+                    <td><code data-example='nom = "Alice"
+age = 25
+message = f"Je suis {nom}, {age} ans"'>f"Bonjour {nom}"<span class="tooltip"></span></code></td>
+                    <td><code data-example='String nom = "Alice";
+int age = 25;
+String message = String.format("Je suis %s, %d ans", nom, age);'>String.format("Bonjour %s", nom)<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Format décimal</td>
+                    <td><code data-example='pi = 3.14159
+texte = f"Pi = {pi:.2f}"  # "Pi = 3.14"'>f"{pi:.2f}"<span class="tooltip"></span></code></td>
+                    <td><code data-example='double pi = 3.14159;
+String texte = String.format("Pi = %.2f", pi);  // "Pi = 3.14"'>String.format("%.2f", pi)<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- MÉTHODES UTILES -->
+                <tr class="category"><td colspan="3">Méthodes Utiles</td></tr>
+                <tr>
+                    <td class="concept">Conversion en string</td>
+                    <td><code data-example='age = 25
+texte = "J\'ai " + str(age) + " ans"'>str(42)<span class="tooltip"></span></code></td>
+                    <td><code data-example='int age = 25;
+String texte = "J\'ai " + String.valueOf(age) + " ans";'>String.valueOf(42)<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Conversion en int</td>
+                    <td><code data-example='texte = "42"
+nombre = int(texte)
+double = nombre * 2'>int("42")<span class="tooltip"></span></code></td>
+                    <td><code data-example='String texte = "42";
+int nombre = Integer.parseInt(texte);
+int double = nombre * 2;'>Integer.parseInt("42")<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Arrondir</td>
+                    <td><code data-example='valeur = 3.7
+arrondi = round(valeur)  # 4'>round(3.7)<span class="tooltip"></span></code></td>
+                    <td><code data-example='double valeur = 3.7;
+long arrondi = Math.round(valeur);  // 4'>Math.round(3.7)<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Valeur absolue</td>
+                    <td><code data-example='negatif = -5
+positif = abs(negatif)  # 5'>abs(-5)<span class="tooltip"></span></code></td>
+                    <td><code data-example='int negatif = -5;
+int positif = Math.abs(negatif);  // 5'>Math.abs(-5)<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Min/Max</td>
+                    <td><code data-example='x, y = 10, 20
+minimum = min(x, y)  # 10
+maximum = max(x, y)  # 20'>min(a, b)<span class="tooltip"></span></code></td>
+                    <td><code data-example='int x = 10, y = 20;
+int minimum = Math.min(x, y);  // 10
+int maximum = Math.max(x, y);  // 20'>Math.min(a, b)<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Racine carrée</td>
+                    <td><code data-example='import math
+racine = math.sqrt(16)  # 4.0'>math.sqrt(16)<span class="tooltip"></span></code></td>
+                    <td><code data-example='double racine = Math.sqrt(16);  // 4.0'>Math.sqrt(16)<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Nombre aléatoire</td>
+                    <td><code data-example='import random
+x = random.random()  # 0.0 à 1.0
+y = random.randint(1, 10)  # 1 à 10'>random.random()<span class="tooltip"></span></code></td>
+                    <td><code data-example='double x = Math.random();  // 0.0 à 1.0
+int y = (int)(Math.random() * 10) + 1;  // 1 à 10'>Math.random()<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- STRUCTURE PROGRAMME -->
+                <tr class="category"><td colspan="3">Structure Programme</td></tr>
+                <tr>
+                    <td class="concept">Point d'entrée</td>
+                    <td><code data-example='def main():
+    print("Programme principal")
+
+if __name__ == "__main__":
+    main()'>if __name__ == "__main__":<span class="tooltip"></span></code></td>
+                    <td><code data-example='public class Main {
+    public static void main(String[] args) {
+        System.out.println("Programme principal");
+    }
+}'>public static void main(String[] args) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Arguments CLI</td>
+                    <td><code data-example='import sys
+if len(sys.argv) > 1:
+    fichier = sys.argv[1]'>sys.argv<span class="tooltip"></span></code></td>
+                    <td><code data-example='public static void main(String[] args) {
+    if (args.length > 0) {
+        String fichier = args[0];
+    }
+}'>args[0], args[1]...<span class="tooltip"></span></code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="no-results" id="noResults">
+            <h3>Aucun résultat trouvé</h3>
+            <p>Essayez avec d'autres mots-clés</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Cliquez sur le code pour copier | <kbd>/</kbd> pour rechercher | <kbd>Esc</kbd> pour effacer</p>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const searchInput = document.getElementById('searchInput');
+        const tbody = document.querySelector('tbody');
+        const noResults = document.getElementById('noResults');
+        const totalCount = document.getElementById('totalCount');
+        const visibleCount = document.getElementById('visibleCount');
+        const categoryCount = document.getElementById('categoryCount');
+
+        // Theme
+        const savedTheme = localStorage.getItem('py2java-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('py2java-theme', next);
+        });
+
+        // Search
+        const allRows = Array.from(tbody.querySelectorAll('tr:not(.category)'));
+        const categories = Array.from(tbody.querySelectorAll('tr.category'));
+
+        function updateStats() {
+            const visible = allRows.filter(row => !row.classList.contains('hidden')).length;
+            totalCount.textContent = allRows.length;
+            visibleCount.textContent = visible;
+            categoryCount.textContent = categories.length;
+        }
+
+        function applyFilters() {
+            const term = searchInput.value.toLowerCase().trim();
+            let hasResults = false;
+
+            allRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const matches = term === '' || text.includes(term);
+                row.classList.toggle('hidden', !matches);
+                if (matches) hasResults = true;
+            });
+
+            categories.forEach(cat => {
+                let next = cat.nextElementSibling;
+                let hasVisible = false;
+                while (next && !next.classList.contains('category')) {
+                    if (!next.classList.contains('hidden')) {
+                        hasVisible = true;
+                        break;
+                    }
+                    next = next.nextElementSibling;
+                }
+                cat.style.display = hasVisible ? '' : 'none';
+            });
+
+            noResults.classList.toggle('visible', !hasResults);
+            updateStats();
+        }
+
+        searchInput.addEventListener('input', applyFilters);
+        updateStats();
+
+        // Tooltips with examples
+        document.querySelectorAll('code[data-example]').forEach(code => {
+            const example = code.getAttribute('data-example');
+            const tooltip = code.querySelector('.tooltip');
+            if (tooltip && example) {
+                tooltip.textContent = example;
+            }
+        });
+
+        // Copy code
+        document.querySelectorAll('code').forEach(code => {
+            code.title = 'Cliquer pour copier';
+            code.addEventListener('click', async () => {
+                const textToCopy = code.childNodes[0].textContent;
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    code.classList.add('copied');
+                    setTimeout(() => code.classList.remove('copied'), 400);
+                } catch (err) {}
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement !== searchInput) {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchInput.blur();
+                applyFilters();
+            }
+        });
+    </script>
 </body>
 </html>

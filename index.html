@@ -995,6 +995,85 @@ nombres.sort()  # [1, 1, 3, 4, 5]'>liste.sort()<span class="tooltip"></span></co
 Collections.sort(nombres);'>Collections.sort(liste);<span class="tooltip"></span></code></td>
                 </tr>
 
+                <!-- TUPLES -->
+                <tr class="category"><td colspan="3">Tuples & Structures</td></tr>
+                <tr>
+                    <td class="concept">Tuple (immutable)</td>
+                    <td><code data-example='point = (10, 20)
+x, y = point
+personne = ("Alice", 25)'>t = (1, 2, 3)<span class="tooltip"></span></code></td>
+                    <td><code data-example='// Pas de tuple natif, utiliser array ou record
+int[] point = {10, 20};
+// Ou créer une classe
+record Point(int x, int y) {}'>int[] t = {1, 2, 3};<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Unpacking multiple</td>
+                    <td><code data-example='a, b, c = 1, 2, 3
+x, y = (10, 20)
+nom, age = "Alice", 25'>a, b = 1, 2<span class="tooltip"></span></code></td>
+                    <td><code data-example='// Pas de unpacking direct
+int a = 1;
+int b = 2;
+// Ou méthode qui retourne objet'>int a = 1; int b = 2;<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Swap variables</td>
+                    <td><code data-example='a = 5
+b = 10
+a, b = b, a  # a=10, b=5'>a, b = b, a<span class="tooltip"></span></code></td>
+                    <td><code data-example='int a = 5, b = 10;
+int temp = a;
+a = b;
+b = temp;'>int temp = a; a = b; b = temp;<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- LIST COMPREHENSION & STREAMS -->
+                <tr class="category"><td colspan="3">Programmation Fonctionnelle</td></tr>
+                <tr>
+                    <td class="concept">List comprehension</td>
+                    <td><code data-example='# Carrés de 0 à 9
+carres = [x**2 for x in range(10)]
+# Filtrer pairs
+pairs = [x for x in range(10) if x % 2 == 0]'>[x**2 for x in range(10)]<span class="tooltip"></span></code></td>
+                    <td><code data-example='// Stream API
+List<Integer> carres = IntStream.range(0, 10)
+    .map(x -> x * x)
+    .boxed()
+    .collect(Collectors.toList());'>stream().map(x -> x*x).collect(Collectors.toList())<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Filter</td>
+                    <td><code data-example='nombres = [1, 2, 3, 4, 5, 6]
+pairs = [x for x in nombres if x % 2 == 0]
+# Ou avec filter
+pairs = list(filter(lambda x: x % 2 == 0, nombres))'>filter(lambda x: x > 0, liste)<span class="tooltip"></span></code></td>
+                    <td><code data-example='List<Integer> nombres = Arrays.asList(1, 2, 3, 4, 5, 6);
+List<Integer> pairs = nombres.stream()
+    .filter(x -> x % 2 == 0)
+    .collect(Collectors.toList());'>stream().filter(x -> x > 0).collect(Collectors.toList())<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Map</td>
+                    <td><code data-example='nombres = [1, 2, 3, 4]
+doubles = list(map(lambda x: x * 2, nombres))
+# Ou comprehension
+doubles = [x * 2 for x in nombres]'>map(lambda x: x * 2, liste)<span class="tooltip"></span></code></td>
+                    <td><code data-example='List<Integer> nombres = Arrays.asList(1, 2, 3, 4);
+List<Integer> doubles = nombres.stream()
+    .map(x -> x * 2)
+    .collect(Collectors.toList());'>stream().map(x -> x * 2).collect(Collectors.toList())<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Reduce</td>
+                    <td><code data-example='from functools import reduce
+nombres = [1, 2, 3, 4]
+somme = reduce(lambda a, b: a + b, nombres)  # 10'>reduce(lambda a, b: a + b, liste)<span class="tooltip"></span></code></td>
+                    <td><code data-example='List<Integer> nombres = Arrays.asList(1, 2, 3, 4);
+int somme = nombres.stream()
+    .reduce(0, (a, b) -> a + b);  // 10'>stream().reduce(0, (a, b) -> a + b)<span class="tooltip"></span></code></td>
+                </tr>
+
                 <!-- FONCTIONS -->
                 <tr class="category"><td colspan="3">Fonctions</td></tr>
                 <tr>
@@ -1246,6 +1325,108 @@ class Dog extends Animal {
 }'>public class Dog extends Animal {<span class="tooltip"></span></code></td>
                 </tr>
 
+                <!-- ADVANCED OOP -->
+                <tr class="category"><td colspan="3">POO Avancée</td></tr>
+                <tr>
+                    <td class="concept">Méthode statique</td>
+                    <td><code data-example='class Math:
+    @staticmethod
+    def add(a, b):
+        return a + b
+
+resultat = Math.add(5, 3)'>@staticmethod<span class="tooltip"></span></code></td>
+                    <td><code data-example='public class Math {
+    public static int add(int a, int b) {
+        return a + b;
+    }
+}
+int resultat = Math.add(5, 3);'>public static int add(int a, int b) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Property (getter/setter)</td>
+                    <td><code data-example='class Person:
+    def __init__(self):
+        self._age = 0
+    
+    @property
+    def age(self):
+        return self._age
+    
+    @age.setter
+    def age(self, value):
+        self._age = value'>@property<span class="tooltip"></span></code></td>
+                    <td><code data-example='public class Person {
+    private int age;
+    
+    public int getAge() {
+        return age;
+    }
+    
+    public void setAge(int age) {
+        this.age = age;
+    }
+}'>public int getAge() { return age; }<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Classe abstraite</td>
+                    <td><code data-example='from abc import ABC, abstractmethod
+
+class Animal(ABC):
+    @abstractmethod
+    def sound(self):
+        pass'>from abc import ABC, abstractmethod<span class="tooltip"></span></code></td>
+                    <td><code data-example='abstract class Animal {
+    abstract void sound();
+}
+
+class Dog extends Animal {
+    void sound() {
+        System.out.println("Woof");
+    }
+}'>abstract class Animal {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Interface</td>
+                    <td><code data-example='# Pas d\'interface, utiliser ABC
+from abc import ABC, abstractmethod
+
+class Drawable(ABC):
+    @abstractmethod
+    def draw(self):
+        pass'># Pas d'interface (utiliser ABC)<span class="tooltip"></span></code></td>
+                    <td><code data-example='interface Drawable {
+    void draw();
+}
+
+class Circle implements Drawable {
+    public void draw() {
+        System.out.println("Drawing circle");
+    }
+}'>interface Drawable {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Décorateur</td>
+                    <td><code data-example='def timer(func):
+    def wrapper(*args):
+        start = time.time()
+        result = func(*args)
+        print(f"Temps: {time.time() - start}")
+        return result
+    return wrapper
+
+@timer
+def calculate():
+    return sum(range(1000000))'>@decorator<span class="tooltip"></span></code></td>
+                    <td><code data-example='// Annotations (pas identique)
+@Override
+public void method() {
+    // ...
+}
+
+// Ou pattern Decorator manuel
+Decorator wrappedObj = new Decorator(obj);'>@Override (annotations)<span class="tooltip"></span></code></td>
+                </tr>
+
                 <!-- GESTION D'ERREURS -->
                 <tr class="category"><td colspan="3">Gestion d'Erreurs</td></tr>
                 <tr>
@@ -1343,6 +1524,57 @@ for (Map.Entry<String, Integer> e : scores.entrySet()) {
 }'>for (Map.Entry&lt;K,V&gt; e : d.entrySet()) {<span class="tooltip"></span></code></td>
                 </tr>
 
+                <!-- SETS -->
+                <tr class="category"><td colspan="3">Sets (Ensembles)</td></tr>
+                <tr>
+                    <td class="concept">Créer un set</td>
+                    <td><code data-example='nombres = {1, 2, 3, 4, 5}
+vide = set()'>s = {1, 2, 3}<span class="tooltip"></span></code></td>
+                    <td><code data-example='HashSet<Integer> nombres = new HashSet<>();
+nombres.add(1);
+nombres.add(2);'>HashSet&lt;Integer&gt; s = new HashSet&lt;&gt;();<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Ajouter élément</td>
+                    <td><code data-example='tags = {"python", "java"}
+tags.add("rust")'>s.add(4)<span class="tooltip"></span></code></td>
+                    <td><code data-example='HashSet<String> tags = new HashSet<>();
+tags.add("python");
+tags.add("rust");'>s.add(4);<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Supprimer élément</td>
+                    <td><code data-example='nombres = {1, 2, 3, 4}
+nombres.remove(2)'>s.remove(2)<span class="tooltip"></span></code></td>
+                    <td><code data-example='HashSet<Integer> nombres = new HashSet<>();
+nombres.remove(2);'>s.remove(2);<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Union</td>
+                    <td><code data-example='a = {1, 2, 3}
+b = {3, 4, 5}
+union = a | b  # {1, 2, 3, 4, 5}'>a | b<span class="tooltip"></span></code></td>
+                    <td><code data-example='HashSet<Integer> a = new HashSet<>(Arrays.asList(1, 2, 3));
+HashSet<Integer> union = new HashSet<>(a);
+union.addAll(b);'>union.addAll(b);<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Intersection</td>
+                    <td><code data-example='a = {1, 2, 3}
+b = {2, 3, 4}
+inter = a & b  # {2, 3}'>a & b<span class="tooltip"></span></code></td>
+                    <td><code data-example='HashSet<Integer> inter = new HashSet<>(a);
+inter.retainAll(b);'>inter.retainAll(b);<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Différence</td>
+                    <td><code data-example='a = {1, 2, 3}
+b = {2, 3, 4}
+diff = a - b  # {1}'>a - b<span class="tooltip"></span></code></td>
+                    <td><code data-example='HashSet<Integer> diff = new HashSet<>(a);
+diff.removeAll(b);'>diff.removeAll(b);<span class="tooltip"></span></code></td>
+                </tr>
+
                 <!-- FICHIERS -->
                 <tr class="category"><td colspan="3">Fichiers</td></tr>
                 <tr>
@@ -1373,6 +1605,32 @@ while ((ligne = br.readLine()) != null) {
 fw.write("Première ligne\n");
 fw.write("Deuxième ligne");
 fw.close();'>fw.write("texte");<span class="tooltip"></span></code></td>
+                </tr>
+
+                <!-- CONTEXT MANAGERS -->
+                <tr class="category"><td colspan="3">Gestion de Ressources</td></tr>
+                <tr>
+                    <td class="concept">With statement</td>
+                    <td><code data-example='with open("file.txt") as f:
+    data = f.read()
+# Fichier fermé automatiquement'>with open("file.txt") as f:<span class="tooltip"></span></code></td>
+                    <td><code data-example='// Try-with-resources (Java 7+)
+try (BufferedReader br = new BufferedReader(new FileReader("file.txt"))) {
+    String data = br.readLine();
+}
+// Ressource fermée auto'>try (BufferedReader br = ...) {<span class="tooltip"></span></code></td>
+                </tr>
+                <tr>
+                    <td class="concept">Multiple resources</td>
+                    <td><code data-example='with open("in.txt") as f_in, open("out.txt", "w") as f_out:
+    for ligne in f_in:
+        f_out.write(ligne.upper())'>with open("in.txt") as f1, open("out.txt") as f2:<span class="tooltip"></span></code></td>
+                    <td><code data-example='try (
+    BufferedReader in = new BufferedReader(new FileReader("in.txt"));
+    BufferedWriter out = new BufferedWriter(new FileWriter("out.txt"))
+) {
+    // Utiliser les ressources
+}'>try (Reader in = ...; Writer out = ...) {<span class="tooltip"></span></code></td>
                 </tr>
 
                 <!-- IMPORTS -->

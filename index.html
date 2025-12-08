@@ -37,20 +37,11 @@
             box-sizing: border-box;
         }
 
-        html {
-            color-scheme: dark;
-        }
-
-        [data-theme="light"] html {
-            color-scheme: light;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            will-change: background-color, color;
         }
 
         /* Header */
@@ -61,7 +52,6 @@
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
             padding: 20px 40px;
-            contain: layout style paint;
         }
 
         .header-content {
@@ -202,7 +192,6 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 24px 40px 60px;
-            contain: layout style;
         }
 
         /* Table */
@@ -278,7 +267,6 @@
 
         tbody tr {
             position: relative;
-            will-change: background-color;
         }
 
         tbody tr:hover {
@@ -293,7 +281,6 @@
         /* Category Row */
         .category {
             background: var(--bg-secondary);
-            will-change: background-color;
         }
 
         .category td {
@@ -360,7 +347,6 @@
             white-space: pre-wrap;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.15s;
             z-index: 9999;
             min-width: 320px;
             max-width: 450px;
@@ -516,7 +502,7 @@
             }
 
             thead {
-                top: 120px;
+                position: static;
             }
 
             code {
@@ -1566,12 +1552,8 @@ if len(sys.argv) > 1:
         themeToggle.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme');
             const next = current === 'light' ? 'dark' : 'light';
-            
-            // Force synchronous update
-            requestAnimationFrame(() => {
-                document.documentElement.setAttribute('data-theme', next);
-                localStorage.setItem('py2java-theme', next);
-            });
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('py2java-theme', next);
         });
 
         // Search

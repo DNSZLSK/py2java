@@ -437,6 +437,10 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
+
             .header {
                 padding: 16px 20px;
             }
@@ -482,10 +486,18 @@
             .table-container {
                 padding: 16px 0 40px;
                 overflow-x: auto;
+                overflow-y: visible;
+                -webkit-overflow-scrolling: touch;
+                scroll-behavior: smooth;
             }
 
             table {
-                min-width: 600px;
+                min-width: 700px;
+                display: table;
+            }
+
+            thead {
+                position: static;
             }
 
             th, td {
@@ -495,33 +507,21 @@
 
             th {
                 font-size: 11px;
+                white-space: nowrap;
             }
 
             .concept {
                 font-size: 14px;
             }
 
-            thead {
-                position: static;
-            }
-
             code {
                 font-size: 13px;
                 padding: 6px 12px;
+                white-space: nowrap;
             }
 
             .tooltip {
-                min-width: 260px;
-                max-width: calc(100vw - 40px);
-                font-size: 12px;
-                padding: 12px 14px;
-                left: 50%;
-                right: auto;
-                transform: translateX(-50%);
-            }
-
-            .tooltip::after {
-                left: 50%;
+                display: none !important;
             }
 
             .doc-link {
